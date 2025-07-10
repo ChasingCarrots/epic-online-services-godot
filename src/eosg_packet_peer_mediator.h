@@ -88,6 +88,7 @@ public:
     }
 
     int get_total_packet_count() {
+        EOSApiLockGuard eos_api_lockguard;
         int ret = 0;
         for (KeyValue<String, List<PacketData>> &E : socket_packet_queues) {
             ret += E.value.size();
@@ -96,11 +97,13 @@ public:
     }
 
     int get_packet_count_for_socket(const String &socket_id) {
+        EOSApiLockGuard eos_api_lockguard;
         ERR_FAIL_COND_V_MSG(!socket_packet_queues.has(socket_id), 0, "Failed to get packet count for socket \"%s\". Socket does not exist.");
         return socket_packet_queues[socket_id].size();
     }
 
     Array get_sockets() {
+        EOSApiLockGuard eos_api_lockguard;
         Array ret;
         for (KeyValue<String, List<PacketData>> &E : socket_packet_queues) {
             ret.push_back(E.key);
@@ -109,19 +112,23 @@ public:
     }
 
     bool has_socket(const String &socket_id) {
+        EOSApiLockGuard eos_api_lockguard;
         return socket_packet_queues.has(socket_id);
     }
 
     int get_queue_size_limit() {
+        EOSApiLockGuard eos_api_lockguard;
         return max_queue_size;
     }
 
     void set_queue_size_limit(int limit) {
+        EOSApiLockGuard eos_api_lockguard;
         ERR_FAIL_COND_MSG(limit < 1, "Cannot set queue size limit. Limit must be greater than 0");
         max_queue_size = limit;
     }
 
     int get_connection_request_count() {
+        EOSApiLockGuard eos_api_lockguard;
         return pending_connection_requests.size();
     }
 
