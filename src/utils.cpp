@@ -1,5 +1,9 @@
 #include "utils.h"
 
+#ifdef EOS_API_THREAD_SAFETY_ON
+std::recursive_mutex EOSApiLockGuard::s_eos_api_mutex;
+#endif
+
 String eosg_epic_account_id_to_string(EOS_EpicAccountId accountId) {
     if (accountId == nullptr) {
         return String("");

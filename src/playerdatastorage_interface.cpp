@@ -4,6 +4,7 @@
 using namespace godot;
 
 void IEOS::playerdatastorage_interface_query_file(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_playerDataStorageInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString filename = VARIANT_TO_CHARSTRING(p_options->get("filename"));
@@ -27,6 +28,7 @@ void IEOS::playerdatastorage_interface_query_file(Ref<RefCounted> p_options) {
 }
 
 void IEOS::playerdatastorage_interface_query_file_list(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_playerDataStorageInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -49,6 +51,7 @@ void IEOS::playerdatastorage_interface_query_file_list(Ref<RefCounted> p_options
 }
 
 Dictionary IEOS::playerdatastorage_interface_copy_file_metadata_by_filename(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString filename = VARIANT_TO_CHARSTRING(p_options->get("filename"));
@@ -69,6 +72,7 @@ Dictionary IEOS::playerdatastorage_interface_copy_file_metadata_by_filename(Ref<
 }
 
 Dictionary IEOS::playerdatastorage_interface_get_file_metadata_count(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -87,6 +91,7 @@ Dictionary IEOS::playerdatastorage_interface_get_file_metadata_count(Ref<RefCoun
 }
 
 Dictionary IEOS::playerdatastorage_interface_copy_file_metadata_at_index(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     int index = p_options->get("index");
@@ -107,6 +112,7 @@ Dictionary IEOS::playerdatastorage_interface_copy_file_metadata_at_index(Ref<Ref
 }
 
 void IEOS::playerdatastorage_interface_duplicate_file(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_playerDataStorageInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString source_filename = VARIANT_TO_CHARSTRING(p_options->get("source_filename"));
@@ -132,6 +138,7 @@ void IEOS::playerdatastorage_interface_duplicate_file(Ref<RefCounted> p_options)
 }
 
 void IEOS::playerdatastorage_interface_delete_file(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_playerDataStorageInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString filename = VARIANT_TO_CHARSTRING(p_options->get("filename"));
@@ -155,6 +162,7 @@ void IEOS::playerdatastorage_interface_delete_file(Ref<RefCounted> p_options) {
 }
 
 int IEOS::playerdatastorage_interface_delete_cache(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -178,6 +186,7 @@ int IEOS::playerdatastorage_interface_delete_cache(Ref<RefCounted> p_options) {
 }
 
 Variant IEOS::playerdatastorage_interface_read_file(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, Variant());
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString filename = VARIANT_TO_CHARSTRING(p_options->get("filename"));
@@ -237,6 +246,7 @@ Variant IEOS::playerdatastorage_interface_read_file(Ref<RefCounted> p_options) {
 }
 
 Variant IEOS::playerdatastorage_interface_write_file(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_playerDataStorageInterface, Variant());
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString filename = VARIANT_TO_CHARSTRING(p_options->get("filename"));

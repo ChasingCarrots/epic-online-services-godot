@@ -3,6 +3,8 @@
 using namespace godot;
 
 Dictionary IEOS::achievements_interface_copy_achievement_definition_v2_by_achievement_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
+
     ERR_FAIL_NULL_V(s_achievementsInterface, {});
     CharString achievement_id = VARIANT_TO_CHARSTRING(p_options->get("achievement_id"));
 
@@ -21,6 +23,7 @@ Dictionary IEOS::achievements_interface_copy_achievement_definition_v2_by_achiev
 }
 
 Dictionary IEOS::achievements_interface_copy_achievement_definition_v2_by_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_achievementsInterface, {});
     EOS_Achievements_CopyAchievementDefinitionV2ByIndexOptions options;
     memset(&options, 0, sizeof(options));
@@ -37,6 +40,7 @@ Dictionary IEOS::achievements_interface_copy_achievement_definition_v2_by_index(
 }
 
 Dictionary IEOS::achievements_interface_copy_player_achievement_by_achievement_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_achievementsInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -59,6 +63,7 @@ Dictionary IEOS::achievements_interface_copy_player_achievement_by_achievement_i
 }
 
 Dictionary IEOS::achievements_interface_copy_player_achievement_by_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_achievementsInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -80,6 +85,7 @@ Dictionary IEOS::achievements_interface_copy_player_achievement_by_index(Ref<Ref
 }
 
 int IEOS::achievements_interface_get_achievement_definition_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_achievementsInterface, 0);
     EOS_Achievements_GetAchievementDefinitionCountOptions options;
     memset(&options, 0, sizeof(options));
@@ -89,6 +95,7 @@ int IEOS::achievements_interface_get_achievement_definition_count(Ref<RefCounted
 }
 
 void IEOS::achievements_interface_query_definitions(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_achievementsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -109,6 +116,7 @@ void IEOS::achievements_interface_query_definitions(Ref<RefCounted> p_options) {
 }
 
 int IEOS::achievements_interface_get_player_achievement_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_achievementsInterface, 0);
     CharString user_id = VARIANT_TO_CHARSTRING(p_options->get("user_id"));
 
@@ -121,6 +129,7 @@ int IEOS::achievements_interface_get_player_achievement_count(Ref<RefCounted> p_
 }
 
 void IEOS::achievements_interface_query_player_achievements(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_achievementsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -145,6 +154,7 @@ void IEOS::achievements_interface_query_player_achievements(Ref<RefCounted> p_op
 }
 
 void IEOS::achievements_interface_unlock_achievements(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_achievementsInterface);
     CharString user_id = VARIANT_TO_CHARSTRING(p_options->get("user_id"));
     Array p_achievement_ids = p_options->get("achievement_ids");

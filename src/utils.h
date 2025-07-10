@@ -16,6 +16,7 @@
 #include "godot_cpp/variant/char_string.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
 #include "ieos.h"
+#include <mutex>
 
 using namespace godot;
 
@@ -47,6 +48,22 @@ using namespace godot;
 #define PERSISTENT_CHAR_ARRAY_SET(array_name, storage_vector, index, variant_value) \
     storage_vector.write[index] = VARIANT_TO_CHARSTRING(variant_value);             \
     array_name[index] = storage_vector[index].get_data();
+
+#ifdef EOS_API_THREAD_SAFETY_ON
+class EOSApiLockGuard {
+private:
+    static std::recursive_mutex s_eos_api_mutex;
+    std::lock_guard<std::recursive_mutex> m_lock;
+public:
+    EOSApiLockGuard() : m_lock(s_eos_api_mutex) {}
+};
+#else
+class EOSApiLockGuard {
+public:
+    EOSApiLockGuard() {} // No-op when thread safety is disabled
+};
+#endif
+
 
 String eosg_epic_account_id_to_string(EOS_EpicAccountId accountId);
 

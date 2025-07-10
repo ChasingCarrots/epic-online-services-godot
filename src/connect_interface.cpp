@@ -2,6 +2,7 @@
 using namespace godot;
 
 void IEOS::connect_interface_login(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_connectInterface);
     Ref<RefCounted> p_credentials = p_options->get("credentials");
     Ref<RefCounted> p_user_login_info = p_options->get("user_login_info");
@@ -70,6 +71,7 @@ void IEOS::connect_interface_login(Ref<RefCounted> p_options) {
 }
 
 void IEOS::connect_interface_logout(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_connectInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -92,6 +94,7 @@ void IEOS::connect_interface_logout(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::connect_interface_copy_id_token(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -110,6 +113,7 @@ Dictionary IEOS::connect_interface_copy_id_token(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::connect_interface_copy_product_user_external_account_by_account_id(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
     CharString account_id = VARIANT_TO_CHARSTRING(p_options->get("account_id"));
@@ -131,6 +135,7 @@ Dictionary IEOS::connect_interface_copy_product_user_external_account_by_account
 }
 
 Dictionary IEOS::connect_interface_copy_product_user_external_account_by_account_type(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
     int account_id_type = p_options->get("account_id_type");
@@ -151,6 +156,7 @@ Dictionary IEOS::connect_interface_copy_product_user_external_account_by_account
 }
 
 Dictionary IEOS::connect_interface_copy_product_user_external_account_by_index(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
 
@@ -170,6 +176,7 @@ Dictionary IEOS::connect_interface_copy_product_user_external_account_by_index(R
 }
 
 Dictionary IEOS::connect_interface_copy_product_user_info(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
 
@@ -188,6 +195,7 @@ Dictionary IEOS::connect_interface_copy_product_user_info(Ref<RefCounted> p_opti
 }
 
 void IEOS::connect_interface_create_device_id(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_connectInterface);
     CharString p_device_model = VARIANT_TO_CHARSTRING(p_options->get("device_model"));
 
@@ -208,6 +216,7 @@ void IEOS::connect_interface_create_device_id(Ref<RefCounted> p_options) {
 }
 
 void IEOS::connect_interface_delete_device_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
 	EOS_Connect_DeleteDeviceIdOptions options;
     memset(&options, 0, sizeof(options));
@@ -225,6 +234,7 @@ void IEOS::connect_interface_delete_device_id(Ref<RefCounted> p_options) {
 }
 
 void IEOS::connect_interface_create_user(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     Ref<EOSGContinuanceToken> p_continuance_token = Object::cast_to<EOSGContinuanceToken>(p_options->get("continuance_token"));
     ERR_FAIL_NULL_MSG(p_continuance_token, "Error linking account. LinkAccountOptions.continuance_token is null.");
@@ -249,6 +259,7 @@ void IEOS::connect_interface_create_user(Ref<RefCounted> p_options) {
 }
 
 String IEOS::connect_interface_get_external_account_mapping(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, "");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_external_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_external_user_id"));
@@ -265,16 +276,19 @@ String IEOS::connect_interface_get_external_account_mapping(Ref<RefCounted> p_op
 }
 
 String IEOS::connect_interface_get_logged_in_user_by_index(int p_index) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, "");
     return eosg_product_user_id_to_string(EOS_Connect_GetLoggedInUserByIndex(s_connectInterface, p_index));
 }
 
 int IEOS::connect_interface_get_logged_in_users_count() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, 0);
     return static_cast<int>(EOS_Connect_GetLoggedInUsersCount(s_connectInterface));
 }
 
 int IEOS::connect_interface_get_login_status(const String &p_local_user_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, static_cast<int>(EOS_ELoginStatus::EOS_LS_NotLoggedIn));
     CharString local_user_id = p_local_user_id.utf8();
     EOS_ProductUserId localUserId = eosg_string_to_product_user_id(local_user_id.get_data());
@@ -283,6 +297,7 @@ int IEOS::connect_interface_get_login_status(const String &p_local_user_id) {
 }
 
 int IEOS::connect_interface_get_product_user_external_account_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, 0);
     CharString p_target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
 
@@ -295,6 +310,7 @@ int IEOS::connect_interface_get_product_user_external_account_count(Ref<RefCount
 }
 
 Dictionary IEOS::connect_interface_get_product_user_id_mapping(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_connectInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_product_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_product_user_id"));
@@ -318,6 +334,7 @@ Dictionary IEOS::connect_interface_get_product_user_id_mapping(Ref<RefCounted> p
 }
 
 void IEOS::connect_interface_query_product_user_id_mappings(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     CharString p_local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     TypedArray<String> p_product_user_ids = p_options->get("product_user_ids");
@@ -352,6 +369,7 @@ void IEOS::connect_interface_query_product_user_id_mappings(Ref<RefCounted> p_op
 }
 
 void IEOS::connect_interface_query_external_account_mappings(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     CharString p_local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     int p_account_id_type = p_options->get("account_id_type");
@@ -388,6 +406,7 @@ void IEOS::connect_interface_query_external_account_mappings(Ref<RefCounted> p_o
 }
 
 void IEOS::connect_interface_link_account(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     Ref<EOSGContinuanceToken> p_continuance_token = Object::cast_to<EOSGContinuanceToken>(p_options->get("continuance_token"));
     ERR_FAIL_NULL_MSG(p_continuance_token, "Error linking account. LinkAccountOptions.continuance_token is null.");
@@ -414,6 +433,7 @@ void IEOS::connect_interface_link_account(Ref<RefCounted> p_options) {
 }
 
 void IEOS::connect_interface_verify_id_token(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     Ref<RefCounted> p_id_token = p_options->get("id_token");
     CharString p_product_user_id = VARIANT_TO_CHARSTRING(p_id_token->get("product_user_id"));
@@ -445,6 +465,7 @@ void IEOS::connect_interface_verify_id_token(Ref<RefCounted> p_options) {
 }
 
 void IEOS::connect_interface_transfer_device_id_account(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     String p_primary_local_user_id = p_options->get("primary_local_user_id");
     CharString primary_local_user_id = VARIANT_TO_CHARSTRING(p_options->get("primary_local_user_id"));
@@ -479,6 +500,7 @@ void IEOS::connect_interface_transfer_device_id_account(Ref<RefCounted> p_option
 }
 
 void IEOS::connect_interface_unlink_account(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_connectInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 

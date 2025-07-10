@@ -2,6 +2,7 @@
 using namespace std;
 
 Dictionary IEOS::mods_interface_copy_mod_info(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_modsInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -21,6 +22,7 @@ Dictionary IEOS::mods_interface_copy_mod_info(Ref<RefCounted> p_options) {
 }
 
 void IEOS::mods_interface_enumerate_mods(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_modsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -44,6 +46,7 @@ void IEOS::mods_interface_enumerate_mods(Ref<RefCounted> p_options) {
 }
 
 void IEOS::mods_interface_install_mod(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_modsInterface);
     Dictionary p_mod = p_options->get("mod");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
@@ -71,6 +74,7 @@ void IEOS::mods_interface_install_mod(Ref<RefCounted> p_options) {
 }
 
 void IEOS::mods_interface_uninstall_mod(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_modsInterface);
     Dictionary p_mod = p_options->get("mod");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
@@ -97,6 +101,7 @@ void IEOS::mods_interface_uninstall_mod(Ref<RefCounted> p_options) {
 }
 
 void IEOS::mods_interface_update_mod(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_modsInterface);
     Dictionary p_mod = p_options->get("mod");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));

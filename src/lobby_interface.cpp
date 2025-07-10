@@ -3,6 +3,7 @@
 using namespace godot;
 
 void IEOS::lobby_interface_create_lobby(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString bucket_id = VARIANT_TO_CHARSTRING(p_options->get("bucket_id"));
@@ -57,6 +58,7 @@ void IEOS::lobby_interface_create_lobby(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_join_rtc_room(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -84,6 +86,7 @@ void IEOS::lobby_interface_join_rtc_room(Ref<RefCounted> p_options) {
     });
 }
 void IEOS::lobby_interface_leave_rtc_room(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -107,6 +110,7 @@ void IEOS::lobby_interface_leave_rtc_room(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_destroy_lobby(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -130,6 +134,7 @@ void IEOS::lobby_interface_destroy_lobby(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_join_lobby(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     Ref<EOSGLobbyDetails> p_lobby_details = Object::cast_to<EOSGLobbyDetails>(p_options->get("lobby_details"));
     ERR_FAIL_NULL_MSG(p_lobby_details, "Error joining lobby. JoinLobbyOptions.lobby_details is null.");
@@ -164,6 +169,7 @@ void IEOS::lobby_interface_join_lobby(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_join_lobby_by_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -195,6 +201,7 @@ void IEOS::lobby_interface_join_lobby_by_id(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_leave_lobby(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -218,6 +225,7 @@ void IEOS::lobby_interface_leave_lobby(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::lobby_interface_update_lobby_modification(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -238,6 +246,7 @@ Dictionary IEOS::lobby_interface_update_lobby_modification(Ref<RefCounted> p_opt
 }
 
 void IEOS::lobby_interface_update_lobby(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     Ref<EOSGLobbyModification> lobby_modification = Object::cast_to<EOSGLobbyModification>(p_options->get("lobby_modification"));
     ERR_FAIL_NULL_MSG(lobby_modification, "Error updating lobby. UpdateLobbyOptions.lobby_modification is null.");
@@ -266,6 +275,7 @@ void IEOS::lobby_interface_update_lobby(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_promote_member(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -291,6 +301,7 @@ void IEOS::lobby_interface_promote_member(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_kick_member(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -316,6 +327,7 @@ void IEOS::lobby_interface_kick_member(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_hard_mute_member(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -343,6 +355,7 @@ void IEOS::lobby_interface_hard_mute_member(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_send_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -368,6 +381,7 @@ void IEOS::lobby_interface_send_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_reject_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString invite_id = VARIANT_TO_CHARSTRING(p_options->get("invite_id"));
@@ -391,6 +405,7 @@ void IEOS::lobby_interface_reject_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::lobby_interface_query_invites(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_lobbyInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -412,6 +427,7 @@ void IEOS::lobby_interface_query_invites(Ref<RefCounted> p_options) {
 }
 
 int IEOS::lobby_interface_get_invite_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, 0);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -424,6 +440,7 @@ int IEOS::lobby_interface_get_invite_count(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::lobby_interface_get_invite_id_by_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -444,6 +461,7 @@ Dictionary IEOS::lobby_interface_get_invite_id_by_index(Ref<RefCounted> p_option
 }
 
 Dictionary IEOS::lobby_interface_create_lobby_search(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     EOS_Lobby_CreateLobbySearchOptions options;
     memset(&options, 0, sizeof(options));
@@ -460,6 +478,7 @@ Dictionary IEOS::lobby_interface_create_lobby_search(Ref<RefCounted> p_options) 
 }
 
 Dictionary IEOS::lobby_interface_copy_lobby_details_by_invite_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString invite_id = VARIANT_TO_CHARSTRING(p_options->get("invite_id"));
 
@@ -478,6 +497,7 @@ Dictionary IEOS::lobby_interface_copy_lobby_details_by_invite_id(Ref<RefCounted>
 }
 
 Dictionary IEOS::lobby_interface_copy_lobby_details_by_ui_event_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     EOS_Lobby_CopyLobbyDetailsHandleByUiEventIdOptions options;
     memset(&options, 0, sizeof(options));
@@ -494,6 +514,7 @@ Dictionary IEOS::lobby_interface_copy_lobby_details_by_ui_event_id(Ref<RefCounte
 }
 
 Dictionary IEOS::lobby_interface_copy_lobby_details(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -516,6 +537,7 @@ Dictionary IEOS::lobby_interface_copy_lobby_details(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::lobby_interface_get_rtc_room_name(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -538,6 +560,7 @@ Dictionary IEOS::lobby_interface_get_rtc_room_name(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::lobby_interface_is_rtc_room_connected(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -558,6 +581,7 @@ Dictionary IEOS::lobby_interface_is_rtc_room_connected(Ref<RefCounted> p_options
 }
 
 Dictionary IEOS::lobby_interface_get_connect_string(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString lobby_id = VARIANT_TO_CHARSTRING(p_options->get("lobby_id"));
@@ -583,6 +607,7 @@ Dictionary IEOS::lobby_interface_get_connect_string(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::lobby_interface_parse_connect_string(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_lobbyInterface, {});
     CharString connect_string = VARIANT_TO_CHARSTRING(p_options->get("connect_string"));
 

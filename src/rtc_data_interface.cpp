@@ -1,6 +1,7 @@
 #include "ieos.h"
 
 int IEOS::rtc_data_interface_add_notify_data_received(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_rtcDataInterface, static_cast<int>(EOS_INVALID_NOTIFICATIONID));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString room_name = VARIANT_TO_CHARSTRING(p_options->get("room_name"));
@@ -25,6 +26,7 @@ int IEOS::rtc_data_interface_add_notify_data_received(Ref<RefCounted> p_options)
 }
 
 int IEOS::rtc_data_interface_add_notify_participant_updated(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_rtcDataInterface, static_cast<int>(EOS_INVALID_NOTIFICATIONID));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString room_name = VARIANT_TO_CHARSTRING(p_options->get("room_name"));
@@ -46,6 +48,7 @@ int IEOS::rtc_data_interface_add_notify_participant_updated(Ref<RefCounted> p_op
 }
 
 int IEOS::rtc_data_interface_send_data(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_rtcDataInterface, static_cast<int>(EOS_INVALID_NOTIFICATIONID));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString room_name = VARIANT_TO_CHARSTRING(p_options->get("room_name"));
@@ -63,16 +66,19 @@ int IEOS::rtc_data_interface_send_data(Ref<RefCounted> p_options) {
 }
 
 void IEOS::rtc_data_interface_remove_notify_data_received(int p_notification_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_rtcDataInterface);
     EOS_RTCData_RemoveNotifyDataReceived(s_rtcDataInterface, static_cast<EOS_NotificationId>(p_notification_id));
 }
 
 void IEOS::rtc_data_interface_remove_notify_participant_updated(int p_notification_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_rtcDataInterface);
     EOS_RTCData_RemoveNotifyParticipantUpdated(s_rtcDataInterface, static_cast<EOS_NotificationId>(p_notification_id));
 }
 
 void IEOS::rtc_data_interface_update_receiving(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_rtcDataInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString room_name = VARIANT_TO_CHARSTRING(p_options->get("room_name"));
@@ -102,6 +108,7 @@ void IEOS::rtc_data_interface_update_receiving(Ref<RefCounted> p_options) {
 }
 
 void IEOS::rtc_data_interface_update_sending(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_rtcDataInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString room_name = VARIANT_TO_CHARSTRING(p_options->get("room_name"));

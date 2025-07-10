@@ -141,6 +141,7 @@ else:
 		source=sources,
 	)
 
+env.Append(CPPDEFINES=["EOS_API_THREAD_SAFETY_ON"])
 
 # Disable scons cache for source files
 # NoCache(sources)

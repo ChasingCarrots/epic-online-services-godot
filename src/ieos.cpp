@@ -548,6 +548,7 @@ IEOS::~IEOS() {
 
 void IEOS::tick() {
     if (singleton != nullptr && IEOS::get_singleton()->s_platformInterface != nullptr && IEOS::get_singleton()->isEOSValid) {
+        EOSApiLockGuard eos_api_lockguard;
         EOS_Platform_Tick(IEOS::get_singleton()->s_platformInterface);
     }
 }

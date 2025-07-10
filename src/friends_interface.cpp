@@ -2,6 +2,7 @@
 using namespace std;
 
 void IEOS::friends_interface_accept_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_friendsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -26,6 +27,7 @@ void IEOS::friends_interface_accept_invite(Ref<RefCounted> p_options) {
 }
 
 String IEOS::friends_interface_get_friend_at_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_friendsInterface, "");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -39,6 +41,7 @@ String IEOS::friends_interface_get_friend_at_index(Ref<RefCounted> p_options) {
 }
 
 int IEOS::friends_interface_get_friends_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_friendsInterface, 0);
 	CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -51,6 +54,7 @@ int IEOS::friends_interface_get_friends_count(Ref<RefCounted> p_options) {
 }
 
 int IEOS::friends_interface_get_status(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_friendsInterface, static_cast<int>(EOS_EFriendsStatus::EOS_FS_NotFriends));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -65,6 +69,7 @@ int IEOS::friends_interface_get_status(Ref<RefCounted> p_options) {
 }
 
 void IEOS::friends_interface_query_friends(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_friendsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -86,6 +91,7 @@ void IEOS::friends_interface_query_friends(Ref<RefCounted> p_options) {
 }
 
 void IEOS::friends_interface_reject_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_friendsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -110,6 +116,7 @@ void IEOS::friends_interface_reject_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::friends_interface_send_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_friendsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -134,6 +141,7 @@ void IEOS::friends_interface_send_invite(Ref<RefCounted> p_options) {
 }
 
 int IEOS::friends_interface_get_blocked_users_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_friendsInterface, 0);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -146,6 +154,7 @@ int IEOS::friends_interface_get_blocked_users_count(Ref<RefCounted> p_options) {
 }
 
 String IEOS::friends_interface_get_blocked_user_at_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_friendsInterface, "");
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     int index = static_cast<int>(p_options->get("index"));

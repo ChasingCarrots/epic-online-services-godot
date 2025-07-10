@@ -1,6 +1,7 @@
 #include "ieos.h"
 
 void IEOS::p2p_interface_query_nat_type() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_p2pInterface);
     EOS_P2P_QueryNATTypeOptions options = { 0 };
     options.ApiVersion = EOS_P2P_QUERYNATTYPE_API_LATEST;
@@ -13,6 +14,7 @@ void IEOS::p2p_interface_query_nat_type() {
 }
 
 Dictionary IEOS::p2p_interface_get_nat_type() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, Dictionary());
     EOS_P2P_GetNATTypeOptions options = { 0 };
     options.ApiVersion = EOS_P2P_GETNATTYPE_API_LATEST;
@@ -32,6 +34,7 @@ Dictionary IEOS::p2p_interface_get_nat_type() {
 }
 
 int IEOS::p2p_interface_set_relay_control(int control) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_ERelayControl relay_control = static_cast<EOS_ERelayControl>(control);
     EOS_P2P_SetRelayControlOptions options = { 0 };
@@ -41,6 +44,7 @@ int IEOS::p2p_interface_set_relay_control(int control) {
 }
 
 Dictionary IEOS::p2p_interface_get_relay_control() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, Dictionary());
     EOS_P2P_GetRelayControlOptions options = { 0 };
     options.ApiVersion = EOS_P2P_GETRELAYCONTROL_API_LATEST;
@@ -58,6 +62,7 @@ Dictionary IEOS::p2p_interface_get_relay_control() {
 }
 
 int IEOS::p2p_interface_set_port_range(Ref<RefCounted> options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     int port = options->get("port");
     int max_additional_ports_to_try = options->get("max_additional_ports_to_try");
@@ -69,6 +74,7 @@ int IEOS::p2p_interface_set_port_range(Ref<RefCounted> options) {
 }
 
 Dictionary IEOS::p2p_interface_get_port_range() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, {});
     EOS_P2P_GetPortRangeOptions options = { 0 };
     options.ApiVersion = EOS_P2P_GETPORTRANGE_API_LATEST;
@@ -89,6 +95,7 @@ Dictionary IEOS::p2p_interface_get_port_range() {
 }
 
 int IEOS::p2p_interface_set_packet_queue_size(Ref<RefCounted> options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     uint64_t incoming_packet_queue_max_size_bytes = options->get("incoming_packet_queue_max_size_bytes");
     uint64_t outgoing_packet_queue_max_size_bytes = options->get("outgoing_packet_queue_max_size_bytes");
@@ -100,6 +107,7 @@ int IEOS::p2p_interface_set_packet_queue_size(Ref<RefCounted> options) {
 }
 
 Dictionary IEOS::p2p_interface_get_packet_queue_info() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, {});
     EOS_P2P_GetPacketQueueInfoOptions options = { 0 };
     options.ApiVersion = EOS_P2P_GETPACKETQUEUEINFO_API_LATEST;
@@ -119,6 +127,7 @@ Dictionary IEOS::p2p_interface_get_packet_queue_info() {
 }
 
 EOS_EResult IEOS::_p2p_send_packet(const EOS_P2P_SendPacketOptions *options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_SendPacket(s_p2pInterface, options);
     return result;
@@ -126,6 +135,7 @@ EOS_EResult IEOS::_p2p_send_packet(const EOS_P2P_SendPacketOptions *options) {
 
 EOS_EResult IEOS::_p2p_receive_packet(const EOS_P2P_ReceivePacketOptions *options, void *out_packet_data, uint32_t *out_packet_size,
         uint8_t *out_channel, EOS_ProductUserId *out_remote_user, EOS_P2P_SocketId *out_socket) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_ReceivePacket(s_p2pInterface, options, out_remote_user, out_socket,
             out_channel, out_packet_data, out_packet_size);
@@ -133,30 +143,35 @@ EOS_EResult IEOS::_p2p_receive_packet(const EOS_P2P_ReceivePacketOptions *option
 }
 
 EOS_EResult IEOS::_p2p_accept_connection(const EOS_P2P_AcceptConnectionOptions *options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_AcceptConnection(s_p2pInterface, options);
     return result;
 }
 
 EOS_EResult IEOS::_p2p_close_connection(const EOS_P2P_CloseConnectionOptions *options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_CloseConnection(s_p2pInterface, options);
     return result;
 }
 
 EOS_EResult IEOS::_p2p_close_all_connections(const EOS_P2P_CloseConnectionsOptions *options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_CloseConnections(s_p2pInterface, options);
     return result;
 }
 
 EOS_EResult IEOS::_p2p_get_next_packet_size(const EOS_P2P_GetNextReceivedPacketSizeOptions *options, uint32_t *out_size) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_GetNextReceivedPacketSize(s_p2pInterface, options, out_size);
     return result;
 }
 
 EOS_EResult IEOS::_p2p_clear_packet_queue(const EOS_P2P_ClearPacketQueueOptions *options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_ClearPacketQueue(s_p2pInterface, options);
     return result;
@@ -164,6 +179,7 @@ EOS_EResult IEOS::_p2p_clear_packet_queue(const EOS_P2P_ClearPacketQueueOptions 
 
 EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_established(const EOS_P2P_AddNotifyPeerConnectionEstablishedOptions *options,
         EOS_P2P_OnPeerConnectionEstablishedCallback callback) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_INVALID_NOTIFICATIONID);
     EOS_NotificationId callback_id = EOS_P2P_AddNotifyPeerConnectionEstablished(s_p2pInterface, options, nullptr, callback);
     return callback_id;
@@ -171,6 +187,7 @@ EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_established(const EOS_P
 
 EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_closed(const EOS_P2P_AddNotifyPeerConnectionClosedOptions *options,
         EOS_P2P_OnRemoteConnectionClosedCallback callback) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_INVALID_NOTIFICATIONID);
     EOS_NotificationId callback_id = EOS_P2P_AddNotifyPeerConnectionClosed(s_p2pInterface, options, nullptr, callback);
     return callback_id;
@@ -178,6 +195,7 @@ EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_closed(const EOS_P2P_Ad
 
 EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_request(const EOS_P2P_AddNotifyPeerConnectionRequestOptions *options,
         EOS_P2P_OnIncomingConnectionRequestCallback callback) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_INVALID_NOTIFICATIONID);
     EOS_NotificationId callback_id = EOS_P2P_AddNotifyPeerConnectionRequest(s_p2pInterface, options, nullptr, callback);
     return callback_id;
@@ -185,27 +203,32 @@ EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_request(const EOS_P2P_A
 
 EOS_NotificationId IEOS::_p2p_add_notify_peer_connection_interrupted(const EOS_P2P_AddNotifyPeerConnectionInterruptedOptions *options,
         EOS_P2P_OnPeerConnectionInterruptedCallback callback) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_INVALID_NOTIFICATIONID);
     EOS_NotificationId callback_id = EOS_P2P_AddNotifyPeerConnectionInterrupted(s_p2pInterface, options, nullptr, callback);
     return callback_id;
 }
 
 void IEOS::_p2p_remove_notify_peer_connection_established(EOS_NotificationId callback_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_p2pInterface);
     EOS_P2P_RemoveNotifyPeerConnectionEstablished(s_p2pInterface, callback_id);
 }
 
 void IEOS::_p2p_remove_notify_peer_connection_interrupted(EOS_NotificationId callback_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_p2pInterface);
     EOS_P2P_RemoveNotifyPeerConnectionInterrupted(s_p2pInterface, callback_id);
 }
 
 void IEOS::_p2p_remove_notify_peer_connection_closed(EOS_NotificationId callback_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_p2pInterface);
     EOS_P2P_RemoveNotifyPeerConnectionClosed(s_p2pInterface, callback_id);
 }
 
 void IEOS::_p2p_remove_notify_peer_connection_request(EOS_NotificationId callback_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_p2pInterface);
     EOS_P2P_RemoveNotifyPeerConnectionRequest(s_p2pInterface, callback_id);
 }

@@ -2,6 +2,7 @@
 using namespace std;
 
 Dictionary IEOS::progression_snapshot_interface_begin_snapshot(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_progressionSnapshotInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -20,6 +21,7 @@ Dictionary IEOS::progression_snapshot_interface_begin_snapshot(Ref<RefCounted> p
 }
 
 int IEOS::progression_snapshot_interface_add_progression(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_progressionSnapshotInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString key = VARIANT_TO_CHARSTRING(p_options->get("key"));
     CharString value = VARIANT_TO_CHARSTRING(p_options->get("value"));
@@ -35,6 +37,7 @@ int IEOS::progression_snapshot_interface_add_progression(Ref<RefCounted> p_optio
 }
 
 void IEOS::progression_snapshot_interface_submit_snapshot(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_progressionSnapshotInterface);
     EOS_ProgressionSnapshot_SubmitSnapshotOptions options;
     memset(&options, 0, sizeof(options));
@@ -54,6 +57,7 @@ void IEOS::progression_snapshot_interface_submit_snapshot(Ref<RefCounted> p_opti
 }
 
 void IEOS::progression_snapshot_interface_delete_snapshot(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_progressionSnapshotInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -75,6 +79,7 @@ void IEOS::progression_snapshot_interface_delete_snapshot(Ref<RefCounted> p_opti
 }
 
 int IEOS::progression_snapshot_interface_end_snapshot(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_progressionSnapshotInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_ProgressionSnapshot_EndSnapshotOptions options;
     memset(&options, 0, sizeof(options));

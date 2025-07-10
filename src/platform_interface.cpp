@@ -2,6 +2,7 @@
 using namespace godot;
 
 bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     CharString productId = VARIANT_TO_CHARSTRING(p_options->get("product_id"));
     CharString sandboxId = VARIANT_TO_CHARSTRING(p_options->get("sandbox_id"));
     CharString deploymentId = VARIANT_TO_CHARSTRING(p_options->get("deployment_id"));
@@ -685,6 +686,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::platform_interface_get_active_country_code(const String &p_local_user_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, {});
     CharString user_id = p_local_user_id.utf8();
     EOS_EpicAccountId localUserId = EOS_EpicAccountId_FromString(user_id.get_data());
@@ -703,6 +705,7 @@ Dictionary IEOS::platform_interface_get_active_country_code(const String &p_loca
 }
 
 Dictionary IEOS::platform_interface_get_active_locale_code(const String &p_user_id) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, {});
     CharString user_id = p_user_id.utf8();
     EOS_EpicAccountId LocalUserId = EOS_EpicAccountId_FromString(user_id.get_data());
@@ -721,6 +724,7 @@ Dictionary IEOS::platform_interface_get_active_locale_code(const String &p_user_
 }
 
 Dictionary IEOS::platform_interface_get_override_country_code() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, {});
     char *OutBuffer = (char *)memalloc(EOS_COUNTRYCODE_MAX_LENGTH + 1);
     int32_t *OutBufferLength = (int32_t *)memalloc(sizeof(int32_t));
@@ -737,6 +741,7 @@ Dictionary IEOS::platform_interface_get_override_country_code() {
 }
 
 Dictionary IEOS::platform_interface_get_override_locale_code() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, {});
     char *OutBuffer = (char *)memalloc(EOS_LOCALECODE_MAX_LENGTH + 1);
     int32_t *OutBufferLength = (int32_t *)memalloc(sizeof(int32_t));
@@ -753,23 +758,27 @@ Dictionary IEOS::platform_interface_get_override_locale_code() {
 }
 
 int IEOS::platform_interface_set_override_country_code(const String &p_country_code) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString country_code = p_country_code.utf8();
     return static_cast<int>(EOS_Platform_SetOverrideCountryCode(s_platformInterface, country_code.get_data()));
 }
 
 int IEOS::platform_interface_set_override_locale_code(const String &p_locale_code) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString locale_code = p_locale_code.utf8();
     return static_cast<int>(EOS_Platform_SetOverrideLocaleCode(s_platformInterface, locale_code.get_data()));
 }
 
 int IEOS::platform_interface_check_for_launcher_and_restart() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     return static_cast<int>(EOS_Platform_CheckForLauncherAndRestart(s_platformInterface));
 }
 
 int IEOS::platform_interface_initialize(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     CharString productName = VARIANT_TO_CHARSTRING(p_options->get("product_name"));
     CharString productVersion = VARIANT_TO_CHARSTRING(p_options->get("product_version"));
 
@@ -804,6 +813,7 @@ int IEOS::platform_interface_initialize(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::platform_interface_get_desktop_crossplay_status_info() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, {});
     EOS_Platform_GetDesktopCrossplayStatusOptions options;
     memset(&options, 0, sizeof(options));
@@ -823,24 +833,28 @@ Dictionary IEOS::platform_interface_get_desktop_crossplay_status_info() {
 }
 
 int IEOS::platform_interface_set_application_status(int p_status) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_EResult result = EOS_Platform_SetApplicationStatus(s_platformInterface, static_cast<EOS_EApplicationStatus>(p_status));
     return static_cast<int>(result);
 }
 
 int IEOS::platform_interface_get_application_status() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EApplicationStatus::EOS_AS_Foreground));
     EOS_EApplicationStatus status = EOS_Platform_GetApplicationStatus(s_platformInterface);
     return static_cast<int>(status);
 }
 
 int IEOS::platform_interface_set_network_status(int p_status) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_EResult result = EOS_Platform_SetNetworkStatus(s_platformInterface, static_cast<EOS_ENetworkStatus>(p_status));
     return static_cast<int>(result);
 }
 
 int IEOS::platform_interface_get_network_status() {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_platformInterface, static_cast<int>(EOS_ENetworkStatus::EOS_NS_Online));
     EOS_ENetworkStatus status = EOS_Platform_GetNetworkStatus(s_platformInterface);
     return static_cast<int>(status);
@@ -884,6 +898,7 @@ void IEOS::platform_interface_release() {
 }
 
 int IEOS::platform_interface_shutdown() {
+    EOSApiLockGuard eos_api_lockguard;
     isEOSValid = false;
     EOS_EResult res = EOS_Shutdown();
     return static_cast<int>(res);

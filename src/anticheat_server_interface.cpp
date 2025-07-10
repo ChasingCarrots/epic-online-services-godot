@@ -2,6 +2,7 @@
 using namespace godot;
 
 int IEOS::anticheat_server_interface_begin_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     int p_register_timeout_seconds = p_options->get("register_timeout_seconds");
     CharString p_server_name = VARIANT_TO_CHARSTRING(p_options->get("server_name"));
@@ -21,6 +22,7 @@ int IEOS::anticheat_server_interface_begin_session(Ref<RefCounted> p_options) {
 }
 
 int IEOS::anticheat_server_interface_end_session(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_AntiCheatServer_EndSessionOptions options;
     memset(&options, 0, sizeof(options));
@@ -30,6 +32,7 @@ int IEOS::anticheat_server_interface_end_session(Ref<RefCounted> p_options) {
 }
 
 int IEOS::anticheat_server_interface_register_client(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     int p_client_type = p_options->get("client_type");
@@ -50,6 +53,7 @@ int IEOS::anticheat_server_interface_register_client(Ref<RefCounted> p_options) 
 }
 
 int IEOS::anticheat_server_interface_unregister_client(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
 
@@ -62,6 +66,7 @@ int IEOS::anticheat_server_interface_unregister_client(Ref<RefCounted> p_options
 }
 
 int IEOS::anticheat_server_interface_receive_message_from_client(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     PackedByteArray p_data = p_options->get("data");
@@ -80,6 +85,7 @@ int IEOS::anticheat_server_interface_receive_message_from_client(Ref<RefCounted>
 }
 
 int IEOS::anticheat_server_interface_set_client_details(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     int p_client_flags = p_options->get("client_flags");
@@ -96,6 +102,7 @@ int IEOS::anticheat_server_interface_set_client_details(Ref<RefCounted> p_option
 }
 
 int IEOS::anticheat_server_interface_set_game_session_id(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_game_session_id = VARIANT_TO_CHARSTRING(p_options->get("game_session_id"));
 
@@ -108,6 +115,7 @@ int IEOS::anticheat_server_interface_set_game_session_id(Ref<RefCounted> p_optio
 }
 
 int IEOS::anticheat_server_interface_set_client_network_state(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
 
@@ -121,6 +129,7 @@ int IEOS::anticheat_server_interface_set_client_network_state(Ref<RefCounted> p_
 }
 
 Dictionary IEOS::anticheat_server_interface_get_protect_message_output_length(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, {});
     int p_data_length_bytes = p_options->get("data_length_bytes");
 
@@ -144,6 +153,7 @@ Dictionary IEOS::anticheat_server_interface_get_protect_message_output_length(Re
 }
 
 Dictionary IEOS::anticheat_server_interface_protect_message(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, {});
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     PackedByteArray p_data = p_options->get("data");
@@ -177,6 +187,7 @@ Dictionary IEOS::anticheat_server_interface_protect_message(Ref<RefCounted> p_op
 }
 
 Dictionary IEOS::anticheat_server_interface_unprotect_message(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, {});
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     PackedByteArray p_data = p_options->get("data");
@@ -211,6 +222,7 @@ Dictionary IEOS::anticheat_server_interface_unprotect_message(Ref<RefCounted> p_
 }
 
 int IEOS::anticheat_server_interface_register_event(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     int p_event_id = p_options->get("event_id");
     CharString p_event_name = VARIANT_TO_CHARSTRING(p_options->get("event_name"));
@@ -240,6 +252,7 @@ int IEOS::anticheat_server_interface_register_event(Ref<RefCounted> p_options) {
 }
 
 int IEOS::anticheat_server_interface_log_event(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_client_handle = VARIANT_TO_CHARSTRING(p_options->get("client_handle"));
     int p_event_id = p_options->get("event_id");
@@ -293,6 +306,7 @@ int IEOS::anticheat_server_interface_log_event(Ref<RefCounted> p_options) {
 }
 
 int IEOS::anticheat_server_interface_log_game_round_start(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_session_identifier = VARIANT_TO_CHARSTRING(p_options->get("session_identifier"));
     CharString p_level_name = VARIANT_TO_CHARSTRING(p_options->get("level_name"));
@@ -319,6 +333,7 @@ int IEOS::anticheat_server_interface_log_game_round_start(Ref<RefCounted> p_opti
 }
 
 int IEOS::anticheat_server_interface_log_game_round_end(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     int p_winning_team_id = p_options->get("winning_team_id");
 
@@ -331,6 +346,7 @@ int IEOS::anticheat_server_interface_log_game_round_end(Ref<RefCounted> p_option
 }
 
 int IEOS::anticheat_server_interface_log_player_spawn(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_spawned_player_handle = VARIANT_TO_CHARSTRING(p_options->get("spawned_player_handle"));
     int p_team_id = p_options->get("team_id");
@@ -347,6 +363,7 @@ int IEOS::anticheat_server_interface_log_player_spawn(Ref<RefCounted> p_options)
 }
 
 int IEOS::anticheat_server_interface_log_player_despawn(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_despawned_player_handle = VARIANT_TO_CHARSTRING(p_options->get("despawned_player_handle"));
 
@@ -359,6 +376,7 @@ int IEOS::anticheat_server_interface_log_player_despawn(Ref<RefCounted> p_option
 }
 
 int IEOS::anticheat_server_interface_log_player_revive(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_revived_player_handle = VARIANT_TO_CHARSTRING(p_options->get("revived_player_handle"));
     CharString p_reviver_player_handle = VARIANT_TO_CHARSTRING(p_options->get("reviver_player_handle"));
@@ -373,6 +391,7 @@ int IEOS::anticheat_server_interface_log_player_revive(Ref<RefCounted> p_options
 }
 
 int IEOS::anticheat_server_interface_log_player_tick(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_player_handle = VARIANT_TO_CHARSTRING(p_options->get("player_handle"));
     Vector3 p_player_position = p_options->get("player_position");
@@ -403,6 +422,7 @@ int IEOS::anticheat_server_interface_log_player_tick(Ref<RefCounted> p_options) 
 }
 
 int IEOS::anticheat_server_interface_log_player_use_weapon(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     EOS_AntiCheatCommon_LogPlayerUseWeaponData use_weapon_data = eosg_refcounted_to_anticheat_log_player_use_weapon_data(p_options);
 
@@ -415,6 +435,7 @@ int IEOS::anticheat_server_interface_log_player_use_weapon(Ref<RefCounted> p_opt
 }
 
 int IEOS::anticheat_server_interface_log_player_use_ability(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_player_handle = VARIANT_TO_CHARSTRING(p_options->get("player_handle"));
     int p_ability_id = p_options->get("ability_id");
@@ -433,6 +454,7 @@ int IEOS::anticheat_server_interface_log_player_use_ability(Ref<RefCounted> p_op
 }
 
 int IEOS::anticheat_server_interface_log_player_take_damage(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_antiCheatServerInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString p_victim_player_handle = VARIANT_TO_CHARSTRING(p_options->get("victim_player_handle"));
     Vector3 p_victim_player_position = p_options->get("victim_player_position");

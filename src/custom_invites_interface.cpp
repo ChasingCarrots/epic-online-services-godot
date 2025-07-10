@@ -2,6 +2,7 @@
 using namespace std;
 
 int IEOS::custom_invites_interface_finalize_invite(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_customInvitesInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -19,6 +20,7 @@ int IEOS::custom_invites_interface_finalize_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::custom_invites_interface_send_custom_invite(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_customInvitesInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     Array p_target_user_ids = p_options->get("target_user_ids");
@@ -56,6 +58,7 @@ void IEOS::custom_invites_interface_send_custom_invite(Ref<RefCounted> p_options
 }
 
 int IEOS::custom_invites_interface_set_custom_invite(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL_V(s_customInvitesInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString payload = VARIANT_TO_CHARSTRING(p_options->get("payload"));
@@ -70,6 +73,7 @@ int IEOS::custom_invites_interface_set_custom_invite(Ref<RefCounted> p_options) 
 }
 
 void IEOS::custom_invites_interface_send_request_to_join(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_customInvitesInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -99,6 +103,7 @@ void IEOS::custom_invites_interface_send_request_to_join(Ref<RefCounted> p_optio
 // TODO: impl EOS_CustomInvites_RemoveNotifySendCustomNativeInviteRequested
 
 void IEOS::custom_invites_interface_accept_request_to_join(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_customInvitesInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -125,6 +130,7 @@ void IEOS::custom_invites_interface_accept_request_to_join(Ref<RefCounted> p_opt
 }
 
 void IEOS::custom_invites_interface_reject_request_to_join(Ref<RefCounted> p_options) {
+	EOSApiLockGuard eos_api_lockguard;
 	ERR_FAIL_NULL(s_customInvitesInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));

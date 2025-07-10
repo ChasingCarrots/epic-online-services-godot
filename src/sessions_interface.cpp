@@ -1,6 +1,7 @@
 #include "ieos.h"
 
 Dictionary IEOS::sessions_interface_copy_active_session_details(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -19,6 +20,7 @@ Dictionary IEOS::sessions_interface_copy_active_session_details(Ref<RefCounted> 
 }
 
 Dictionary IEOS::sessions_interface_copy_session_details_by_invite_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     CharString invite_id = VARIANT_TO_CHARSTRING(p_options->get("invite_id"));
 
@@ -37,6 +39,7 @@ Dictionary IEOS::sessions_interface_copy_session_details_by_invite_id(Ref<RefCou
 }
 
 Dictionary IEOS::sessions_interface_copy_session_details_by_ui_event_id(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     int ui_event_id = p_options->get("ui_event_id");
 
@@ -55,6 +58,7 @@ Dictionary IEOS::sessions_interface_copy_session_details_by_ui_event_id(Ref<RefC
 }
 
 Dictionary IEOS::sessions_interface_copy_session_details_for_presence(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -73,6 +77,7 @@ Dictionary IEOS::sessions_interface_copy_session_details_for_presence(Ref<RefCou
 }
 
 Dictionary IEOS::sessions_interface_create_session_modification(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
     CharString bucket_id = VARIANT_TO_CHARSTRING(p_options->get("bucket_id"));
@@ -112,6 +117,7 @@ Dictionary IEOS::sessions_interface_create_session_modification(Ref<RefCounted> 
 }
 
 Dictionary IEOS::sessions_interface_create_session_search(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     int max_search_results = p_options->get("max_search_results");
 
@@ -130,6 +136,7 @@ Dictionary IEOS::sessions_interface_create_session_search(Ref<RefCounted> p_opti
 }
 
 int IEOS::sessions_interface_dump_session_state(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -142,6 +149,7 @@ int IEOS::sessions_interface_dump_session_state(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::sessions_interface_get_invite_id_by_index(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     int index = p_options->get("index");
 
@@ -161,6 +169,7 @@ Dictionary IEOS::sessions_interface_get_invite_id_by_index(Ref<RefCounted> p_opt
 }
 
 int IEOS::sessions_interface_is_user_in_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, static_cast<int>(EOS_EResult::EOS_InvalidState));
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -176,6 +185,7 @@ int IEOS::sessions_interface_is_user_in_session(Ref<RefCounted> p_options) {
 }
 
 Dictionary IEOS::sessions_interface_update_session_modification(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, {});
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -194,6 +204,7 @@ Dictionary IEOS::sessions_interface_update_session_modification(Ref<RefCounted> 
 }
 
 int IEOS::sessions_interface_get_invite_count(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_sessionsInterface, 0);
     EOS_Sessions_GetInviteCountOptions options;
     memset(&options, 0, sizeof(options));
@@ -203,6 +214,7 @@ int IEOS::sessions_interface_get_invite_count(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_destroy_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -223,6 +235,7 @@ void IEOS::sessions_interface_destroy_session(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_end_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -243,6 +256,7 @@ void IEOS::sessions_interface_end_session(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_join_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     Ref<EOSGSessionDetails> session_details = Object::cast_to<EOSGSessionDetails>(p_options->get("session_details"));
     ERR_FAIL_NULL_MSG(session_details, "Error joining session. JoinSessionOptions.session_details is null.");
@@ -272,6 +286,7 @@ void IEOS::sessions_interface_join_session(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_query_invites(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
 
@@ -293,6 +308,7 @@ void IEOS::sessions_interface_query_invites(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_register_players(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
     TypedArray<String> players_to_register = p_options->get("players_to_register");
@@ -333,6 +349,7 @@ void IEOS::sessions_interface_register_players(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_reject_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString invite_id = VARIANT_TO_CHARSTRING(p_options->get("invite_id"));
@@ -355,6 +372,7 @@ void IEOS::sessions_interface_reject_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_send_invite(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString local_user_id = VARIANT_TO_CHARSTRING(p_options->get("local_user_id"));
     CharString target_user_id = VARIANT_TO_CHARSTRING(p_options->get("target_user_id"));
@@ -379,6 +397,7 @@ void IEOS::sessions_interface_send_invite(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_start_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
 
@@ -399,6 +418,7 @@ void IEOS::sessions_interface_start_session(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_unregister_players(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     CharString session_name = VARIANT_TO_CHARSTRING(p_options->get("session_name"));
     TypedArray<String> players_to_unregister = p_options->get("players_to_unregister");
@@ -432,6 +452,7 @@ void IEOS::sessions_interface_unregister_players(Ref<RefCounted> p_options) {
 }
 
 void IEOS::sessions_interface_update_session(Ref<RefCounted> p_options) {
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL(s_sessionsInterface);
     Ref<EOSGSessionModification> session_modification = Object::cast_to<EOSGSessionModification>(p_options->get("session_modification"));
     ERR_FAIL_NULL_MSG(session_modification, "Error updating session. UpdateSessionOptions.session_modification is null.");

@@ -2,7 +2,8 @@
 using namespace std;
 
 void IEOS::reports_interface_send_player_behavior_report(Ref<RefCounted> p_options) {
-	ERR_FAIL_NULL(s_reportsInterface);
+    EOSApiLockGuard eos_api_lockguard;
+    ERR_FAIL_NULL(s_reportsInterface);
     CharString reporter_user_id = VARIANT_TO_CHARSTRING(p_options->get("reporter_user_id"));
     CharString reported_user_id = VARIANT_TO_CHARSTRING(p_options->get("reported_user_id"));
     CharString message = VARIANT_TO_CHARSTRING(p_options->get("message"));
