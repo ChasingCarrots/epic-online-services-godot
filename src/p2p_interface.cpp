@@ -127,6 +127,7 @@ Dictionary IEOS::p2p_interface_get_packet_queue_info() {
 }
 
 EOS_EResult IEOS::_p2p_send_packet(const EOS_P2P_SendPacketOptions *options) {
+    UtilityFunctions::print(String("[EOS_EResult IEOS::_p2p_send_packet] send packet from Socket: ") + options->SocketId->SocketName);
     EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_SendPacket(s_p2pInterface, options);
@@ -136,14 +137,19 @@ EOS_EResult IEOS::_p2p_send_packet(const EOS_P2P_SendPacketOptions *options) {
 EOS_EResult IEOS::_p2p_receive_packet(const EOS_P2P_ReceivePacketOptions *options, void *out_packet_data, uint32_t *out_packet_size,
         uint8_t *out_channel, EOS_ProductUserId *out_remote_user, EOS_P2P_SocketId *out_socket) {
     EOSApiLockGuard eos_api_lockguard;
+
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_ReceivePacket(s_p2pInterface, options, out_remote_user, out_socket,
             out_channel, out_packet_data, out_packet_size);
+
+    UtilityFunctions::print(String("[EOS_EResult IEOS::_p2p_receive_packet] receive packet for Socket: ") + out_socket->SocketName);
     return result;
 }
 
 EOS_EResult IEOS::_p2p_accept_connection(const EOS_P2P_AcceptConnectionOptions *options) {
     EOSApiLockGuard eos_api_lockguard;
+
+    UtilityFunctions::print(String("[EOS_EResult IEOS::_p2p_accept_connection] accept connection for Socket: ") + options->SocketId->SocketName);
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_AcceptConnection(s_p2pInterface, options);
     return result;
@@ -151,6 +157,7 @@ EOS_EResult IEOS::_p2p_accept_connection(const EOS_P2P_AcceptConnectionOptions *
 
 EOS_EResult IEOS::_p2p_close_connection(const EOS_P2P_CloseConnectionOptions *options) {
     EOSApiLockGuard eos_api_lockguard;
+    UtilityFunctions::print(String("[EOS_EResult IEOS::_p2p_close_connection] close connection for Socket: ") + options->SocketId->SocketName);
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_CloseConnection(s_p2pInterface, options);
     return result;
@@ -167,6 +174,7 @@ EOS_EResult IEOS::_p2p_get_next_packet_size(const EOS_P2P_GetNextReceivedPacketS
     EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_NULL_V(s_p2pInterface, EOS_EResult::EOS_InvalidParameters);
     EOS_EResult result = EOS_P2P_GetNextReceivedPacketSize(s_p2pInterface, options, out_size);
+    
     return result;
 }
 

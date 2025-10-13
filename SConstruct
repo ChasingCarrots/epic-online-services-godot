@@ -114,11 +114,11 @@ elif env["platform"] == "ios":
 	copy_folder(eos_sdk_folder + "Bin/IOS/EOSSDK.xcframework", plugin_bin_folder + "/ios/EOSSDK.xcframework")
 	
 	env.Append(LINKFLAGS=[
-		"-F", plugin_bin_folder + f"/ios/EOSSDK.xcframework/ios-arm64{"-simulator" if env["ios_simulator"] else ""}",
-		'-framework', 'AuthenticationServices',
-		'-framework', 'EOSSDK',
+    "-F", plugin_bin_folder + f"/ios/EOSSDK.xcframework/ios-arm64{('-simulator' if env['ios_simulator'] else '')}",
+    "-framework", "AuthenticationServices",
+    "-framework", "EOSSDK",
 	])
-	
+
 
 elif env["platform"] == "android":
 	eos_android_arch = "arm64-v8a"

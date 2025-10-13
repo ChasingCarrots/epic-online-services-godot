@@ -18,7 +18,10 @@
  ****************************************/
 
 #include "eosg_packet_peer_mediator.h"
+#include "eos_sdk.h"
 #include "godot_cpp/classes/rendering_server.hpp"
+#include "godot_cpp/core/error_macros.hpp"
+#include "godot_cpp/variant/utility_functions.hpp"
 #include "utils.h"
 
 EOSGPacketPeerMediator *EOSGPacketPeerMediator::singleton = nullptr;
@@ -96,6 +99,8 @@ void EOSGPacketPeerMediator::_on_process_frame() {
             result = IEOS::get_singleton()->_p2p_receive_packet(&recieve_packet_options, packet_data.ptrw(), &buffer_size, &channel, &remote_user, &socket);
             String socket_id_str = socket.SocketName;
 
+            godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_on_process_frame] Recived Packet for Socket ID: ", socket_id_str);
+
             ERR_FAIL_COND_MSG(result == EOS_EResult::EOS_InvalidParameters, "Failed to get packet! Invalid parameters.");
             ERR_FAIL_COND_MSG(result == EOS_EResult::EOS_NotFound, "Failed to get packet! Packet is too large. This should not have happened.");
 
@@ -108,8 +113,10 @@ void EOSGPacketPeerMediator::_on_process_frame() {
             packet.set_sender(remote_user);
             uint8_t event = packet.get_data()->ptrw()[0];
             if (event == 1) {
+                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_on_process_frame] Added Packet to socked_packed_queue in the front: ", socket_id_str);
                 socket_packet_queues[socket_id_str].push_front(packet);
             } else {
+                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_on_process_frame] Added Packet to socked_packed_queue in the back: ", socket_id_str);
                 socket_packet_queues[socket_id_str].push_back(packet);
             }
             if (get_total_packet_count() >= max_queue_size) {
@@ -129,11 +136,15 @@ void EOSGPacketPeerMediator::_on_process_frame() {
  * Returns true if a packet has been successfully polled. False otherwise.
  ****************************************/
 bool EOSGPacketPeerMediator::poll_next_packet(const String &socket_id, PacketData *out_packet) {
+    godot::UtilityFunctions::print("[EOSGPacketPeerMediator::poll_next_packet] Socket ID: ", socket_id);
+
     EOSApiLockGuard eos_api_lockguard;
-    if (!socket_packet_queues.has(socket_id))
-        return false;
-    if (socket_packet_queues[socket_id].size() == 0)
-        return false;
+    if (!socket_packet_queues.has(socket_id)){
+        godot::UtilityFunctions::print("[EOSGPacketPeerMediator::poll_next_packet] socket_packet_queues dosent have Socket ID: ", socket_id);
+        return false;}
+    if (socket_packet_queues[socket_id].size() == 0){
+        godot::UtilityFunctions::print("[EOSGPacketPeerMediator::poll_next_packet] socket_packet_queues is empty ", socket_id);
+        return false;}
 
     PacketData next_packet = socket_packet_queues[socket_id].front()->get();
     *out_packet = next_packet;
@@ -284,13 +295,15 @@ int EOSGPacketPeerMediator::get_packet_count_from_remote_user(const String &remo
 
 /****************************************
  * next_packet_is_peer_id_packet
- * Parameters:
+ * Parameters:packet.get_pack
  * 	socket_id - The socket to check
  * Description: Checks if there is a peer id packet queued for the given socket.
  * Returns true if there is, false otherwise.
  ****************************************/
 bool EOSGPacketPeerMediator::next_packet_is_peer_id_packet(const String &socket_id) {
     EOSApiLockGuard eos_api_lockguard;
+    godot::UtilityFunctions::print("[EOSGPacketPeerMediator::next_packet_is_peer_id_packet] Check for packet for Socket ID: ", socket_id);
+
     ERR_FAIL_COND_V_MSG(!socket_packet_queues.has(socket_id), false, "Failed to check next packet. Socket \"%s\" does not exist.");
     if (socket_packet_queues[socket_id].size() == 0)
         return false;
@@ -312,7 +325,12 @@ void EOS_CALL EOSGPacketPeerMediator::_on_peer_connection_established(const EOS_
     EOSApiLockGuard eos_api_lockguard;
     String socket_id = data->SocketId->SocketName;
     if (!singleton->active_peers.has(socket_id))
+    {
+        godot::UtilityFunctions::printerr("[EOSGPacketPeerMediator::_on_peer_connection_established] Could not find socket id in active peers: ", socket_id);
         return;
+    }
+    
+    godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_on_peer_connection_established] Socket ID: ", socket_id);
     singleton->active_peers[socket_id]->peer_connection_established_callback(data);
 }
 

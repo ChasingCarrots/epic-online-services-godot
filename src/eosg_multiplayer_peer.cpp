@@ -18,6 +18,7 @@
  ****************************************/
 
 #include "eosg_multiplayer_peer.h"
+#include "eos_sdk.h"
 #include "eosg_packet_peer_mediator.h"
 #include "ieos.h"
 
@@ -677,22 +678,35 @@ void EOSGMultiplayerPeer::_poll() {
     if (!polling) { //The next packet should be a peer id packet if we're at this point
         while (EOSGPacketPeerMediator::get_singleton()->next_packet_is_peer_id_packet(socket.get_name())) {
             EOSGPacketPeerMediator::get_singleton()->poll_next_packet(socket.get_name(), &next_packet);
+            godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] polling false and package added to packages: ", socket.get_name());
+            
             packets.push_back(next_packet);
         }
     } else {
         while (EOSGPacketPeerMediator::get_singleton()->poll_next_packet(socket.get_name(), &next_packet)) {
+            godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] polling true and package added to packages: ", socket.get_name());
+            
             packets.push_back(next_packet);
         }
+    }
+    bool print = false;
+    if (!packets.is_empty()){
+        godot::UtilityFunctions::print("----------------------------------", socket.get_name(), " ", "Recieved Packets---------------------------------");
+        print = true;
     }
 
     //process all the packets
     for (PacketData &packet_data : packets) {
         PackedByteArray *data_ptr = packet_data.get_data();
+        godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Packet Size: ", packet_data.size());
         Event event = static_cast<Event>(data_ptr->ptrw()[INDEX_EVENT_TYPE]);
         switch (event) {
             case Event::EVENT_STORE_PACKET: {
+                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Store Packet with Size: ", packet_data.size());
+
                 uint32_t peer_id = *reinterpret_cast<uint32_t *>(data_ptr->ptrw() + INDEX_PEER_ID);
                 if (!peers.has(peer_id)) {
+                    godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Don't have that peer");
                     return; //ignore the packet if we don't have the peer
                 }
 
@@ -734,13 +748,18 @@ void EOSGMultiplayerPeer::_poll() {
                 if (active_mode == MODE_CLIENT) {
                     connection_status = CONNECTION_CONNECTED;
                 }
-
+                
+                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::poll_next_packet] Peer connected to socket id: ", socket.get_name());
                 emit_signal("peer_connected", peer_id);
                 break;
             }
             case Event::EVENT_MESH_CONNECTION_REQUEST:
                 break;
         }
+    }
+
+    if(print){
+        godot::UtilityFunctions::print("----------------------------------End Packets---------------------------------");
     }
 }
 
@@ -917,6 +936,7 @@ Error EOSGMultiplayerPeer::_send_to(const EOS_ProductUserId &remote_peer, const 
     options.Reliability = packet.get_reliability();
     options.bDisableAutoAcceptConnection = EOS_FALSE;
 
+    godot::UtilityFunctions::print("[EOSGMultiplayerPeer::_send_to] send packet | Socket: ", socket.get_name());
     EOS_EResult result = IEOS::get_singleton()->_p2p_send_packet(&options);
 
     ERR_FAIL_COND_V_MSG(result == EOS_EResult::EOS_InvalidParameters, ERR_INVALID_PARAMETER, "Failed to send packet! Invalid parameters.");
@@ -1024,8 +1044,12 @@ void EOSGMultiplayerPeer::peer_connection_established_callback(const EOS_P2P_OnP
         packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
         packet.set_sender(unique_id);
         packet.prepare();
+        
+        godot::UtilityFunctions::print("[EOSGMultiplayerPeer::peer_connection_established_callback] Send peer id to target | Socket: ", socket.get_name(), " | RemoteUserID: ", eosg_product_user_id_to_string(data->RemoteUserId));
 
         Error result = _send_to(data->RemoteUserId, packet);
+    } else {
+        godot::UtilityFunctions::print("[EOSGMultiplayerPeer::peer_connection_established_callback] We are not sending an answer!");
     }
 
     String local_user_id_str = eosg_product_user_id_to_string(data->LocalUserId);
