@@ -18,8 +18,8 @@
  ****************************************/
 
 #include "eosg_multiplayer_peer.h"
-#include "eos_sdk.h"
 #include "eosg_packet_peer_mediator.h"
+#include "godot_cpp/classes/time.hpp"
 #include "ieos.h"
 
 using namespace godot;
@@ -406,7 +406,6 @@ void EOSGMultiplayerPeer::deny_connection_request(const String &remote_user) {
     EOS_EResult result = IEOS::get_singleton()->_p2p_close_connection(&options);
 
     ERR_FAIL_COND_MSG(result == EOS_EResult::EOS_InvalidParameters, "Failed to deny connection. Invalid parameters.");
-
     pending_connection_requests.erase(remote_user_id);
 }
 
@@ -668,6 +667,47 @@ bool EOSGMultiplayerPeer::_is_server() const {
  ****************************************/
 void EOSGMultiplayerPeer::_poll() {
     ERR_FAIL_COND_MSG(!_is_active(), "The multiplayer instance isn't currently active.");
+
+    //Sending EVENT_REQUEST_CONNECTION for pening connections. Sometimes when trying to connect to a new peer, the packet with event type EVENT_RECIEVE_PEER_ID was interrupted. 
+    //This is propably because the EOS SDK internally popped the package and therfore did not forwarded it to EOSG.
+    //With this solution we are trying to send multiple connection request until an answer is recieved and all remote peers has been registered.
+    if (!pending_peer_connections.is_empty()) {
+        uint64_t now = Time::get_singleton()->get_ticks_msec();
+
+        for (int i = pending_peer_connections.size() - 1; i >= 0; --i) {
+            godot::Dictionary connection = pending_peer_connections[i];
+
+            int attempt = static_cast<int>(connection["send_attempts"]);
+            String remote_user_id = connection["remote_user_id"];
+            int last_send_attempt = static_cast<uint64_t>(connection["time_stamp"]);
+
+            if (now < last_send_attempt + REQ_SEND_FREQ) { //Wait for REQ_SEND_FREQ before sending the connection request again
+                continue;
+            }
+            
+            //Our connection attempts failed so we need to remove the pending connection and disconnect the remote user we where trying to connect to.
+            if (attempt > MAX_SEND_ATTEMPTS) {
+                godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_poll] Connection Request failed ", MAX_SEND_ATTEMPTS, " times we will not try again...");
+                pending_peer_connections.remove_at(i);
+                _disconnect_remote_user(eosg_string_to_product_user_id(remote_user_id.utf8())); 
+                continue;
+            }
+
+            connection["time_stamp"] = Time::get_singleton()->get_ticks_msec();
+            connection["send_attempts"] = attempt + 1;
+            pending_peer_connections[i] = connection;
+
+            godot::UtilityFunctions::print("[EOSGMultiplayerPeer::_poll] Sending connection request. Attempt:  ", attempt);
+            EOSGPacket packet;
+            packet.set_event(EVENT_REQUEST_CONNECTION);
+            packet.set_channel(CH_RELIABLE);
+            packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
+            packet.set_sender(unique_id);
+            packet.prepare();
+            Error result = _send_to(eosg_string_to_product_user_id(remote_user_id.utf8()), packet);
+        }
+    }
+
     if (!polling && !EOSGPacketPeerMediator::get_singleton()->next_packet_is_peer_id_packet(socket.get_name()))
         return;
     if (EOSGPacketPeerMediator::get_singleton()->get_packet_count_for_socket(socket.get_name()) == 0)
@@ -678,35 +718,22 @@ void EOSGMultiplayerPeer::_poll() {
     if (!polling) { //The next packet should be a peer id packet if we're at this point
         while (EOSGPacketPeerMediator::get_singleton()->next_packet_is_peer_id_packet(socket.get_name())) {
             EOSGPacketPeerMediator::get_singleton()->poll_next_packet(socket.get_name(), &next_packet);
-            godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] polling false and package added to packages: ", socket.get_name());
-            
             packets.push_back(next_packet);
         }
     } else {
         while (EOSGPacketPeerMediator::get_singleton()->poll_next_packet(socket.get_name(), &next_packet)) {
-            godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] polling true and package added to packages: ", socket.get_name());
-            
             packets.push_back(next_packet);
         }
-    }
-    bool print = false;
-    if (!packets.is_empty()){
-        godot::UtilityFunctions::print("----------------------------------", socket.get_name(), " ", "Recieved Packets---------------------------------");
-        print = true;
     }
 
     //process all the packets
     for (PacketData &packet_data : packets) {
         PackedByteArray *data_ptr = packet_data.get_data();
-        godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Packet Size: ", packet_data.size());
         Event event = static_cast<Event>(data_ptr->ptrw()[INDEX_EVENT_TYPE]);
         switch (event) {
             case Event::EVENT_STORE_PACKET: {
-                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Store Packet with Size: ", packet_data.size());
-
                 uint32_t peer_id = *reinterpret_cast<uint32_t *>(data_ptr->ptrw() + INDEX_PEER_ID);
                 if (!peers.has(peer_id)) {
-                    godot::UtilityFunctions::print("[EOSGPacketPeerMediator::_poll] Don't have that peer");
                     return; //ignore the packet if we don't have the peer
                 }
 
@@ -748,18 +775,39 @@ void EOSGMultiplayerPeer::_poll() {
                 if (active_mode == MODE_CLIENT) {
                     connection_status = CONNECTION_CONNECTED;
                 }
-                
-                godot::UtilityFunctions::print("[EOSGPacketPeerMediator::poll_next_packet] Peer connected to socket id: ", socket.get_name());
                 emit_signal("peer_connected", peer_id);
                 break;
             }
-            case Event::EVENT_MESH_CONNECTION_REQUEST:
+            case Event::EVENT_MESH_CONNECTION_REQUEST: {
                 break;
-        }
-    }
+            }
+            case Event::EVENT_REQUEST_CONNECTION: {
+                EOSGPacket packet;
+                packet.set_event(EVENT_ACCEPT_CONNECTION);
+                packet.set_channel(CH_RELIABLE);
+                packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
+                packet.set_sender(unique_id);
+                packet.prepare();
 
-    if(print){
-        godot::UtilityFunctions::print("----------------------------------End Packets---------------------------------");
+                _send_to(eosg_string_to_product_user_id(packet_data.get_sender().utf8()), packet);
+                break;
+            }
+            case Event::EVENT_ACCEPT_CONNECTION: {
+                String remote_user_id = packet_data.get_sender();
+
+                if (_remove_pending_peer_connection(remote_user_id)) {
+                    EOSGPacket packet;
+                    packet.set_event(EVENT_RECIEVE_PEER_ID);
+                    packet.set_channel(CH_RELIABLE);
+                    packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
+                    packet.set_sender(unique_id);
+                    packet.prepare();
+
+                    _send_to(eosg_string_to_product_user_id(packet_data.get_sender().utf8()), packet);
+                }
+                break;
+            }
+        }
     }
 }
 
@@ -936,7 +984,6 @@ Error EOSGMultiplayerPeer::_send_to(const EOS_ProductUserId &remote_peer, const 
     options.Reliability = packet.get_reliability();
     options.bDisableAutoAcceptConnection = EOS_FALSE;
 
-    godot::UtilityFunctions::print("[EOSGMultiplayerPeer::_send_to] send packet | Socket: ", socket.get_name());
     EOS_EResult result = IEOS::get_singleton()->_p2p_send_packet(&options);
 
     ERR_FAIL_COND_V_MSG(result == EOS_EResult::EOS_InvalidParameters, ERR_INVALID_PARAMETER, "Failed to send packet! Invalid parameters.");
@@ -1018,8 +1065,25 @@ void EOSGMultiplayerPeer::_disconnect_remote_user(const EOS_ProductUserId &remot
     options.RemoteUserId = remote_user;
     options.SocketId = socket.get_id();
     EOS_EResult result = IEOS::get_singleton()->_p2p_close_connection(&options);
-
     ERR_FAIL_COND_MSG(result == EOS_EResult::EOS_InvalidParameters, "Failed to close peer connection. Invalid parameters.");
+}
+
+/****************************************
+ * _remove_pending_peer_connection
+ * Parameters:
+ *   remote_user - The remote user id of the user to remove the pending connection.
+ * Description: Removes the pending connection associated with the remote_user from the list pending_peer_connections.
+ ****************************************/
+bool EOSGMultiplayerPeer::_remove_pending_peer_connection(const String &remote_user){
+    for (int i = 0; i < pending_peer_connections.size(); ++i) {
+        godot::Dictionary connection = pending_peer_connections[i];
+        if (connection.has("remote_user_id") && connection["remote_user_id"] == remote_user) {
+            pending_peer_connections.remove_at(i);
+            return true;
+        }
+    }
+    godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_remove_pending_peer_connection] Couldn't remove pending connection for user: ",remote_user);
+    return false;
 }
 
 /****************************************
@@ -1035,28 +1099,31 @@ void EOSGMultiplayerPeer::_disconnect_remote_user(const EOS_ProductUserId &remot
  * This is how servers and mesh instances peers exchange their peer ids with newly connected peers.
  ****************************************/
 void EOSGMultiplayerPeer::peer_connection_established_callback(const EOS_P2P_OnPeerConnectionEstablishedInfo *data) {
-    if (data->ConnectionType == EOS_EConnectionEstablishedType::EOS_CET_NewConnection &&
-            active_mode != MODE_CLIENT) { //We're either a server or mesh
-        //Send peer id to connected peer
-        EOSGPacket packet;
-        packet.set_event(EVENT_RECIEVE_PEER_ID);
-        packet.set_channel(CH_RELIABLE);
-        packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
-        packet.set_sender(unique_id);
-        packet.prepare();
-        
-        godot::UtilityFunctions::print("[EOSGMultiplayerPeer::peer_connection_established_callback] Send peer id to target | Socket: ", socket.get_name(), " | RemoteUserID: ", eosg_product_user_id_to_string(data->RemoteUserId));
-
-        Error result = _send_to(data->RemoteUserId, packet);
-    } else {
-        godot::UtilityFunctions::print("[EOSGMultiplayerPeer::peer_connection_established_callback] We are not sending an answer!");
-    }
-
     String local_user_id_str = eosg_product_user_id_to_string(data->LocalUserId);
     String remote_user_id_str = eosg_product_user_id_to_string(data->RemoteUserId);
     int connection_type = static_cast<int>(data->ConnectionType);
     int network_type = static_cast<int>(data->NetworkType);
 
+    if (data->ConnectionType == EOS_EConnectionEstablishedType::EOS_CET_NewConnection &&
+            active_mode != MODE_CLIENT) { //We're either a server or mesh
+        //Create a dictionary for each new established connection used to synchronize EOSG Multiplayer Peer
+        Dictionary connection_dict;
+        connection_dict["remote_user_id"] = remote_user_id_str;
+        connection_dict["time_stamp"] = Time::get_singleton()->get_ticks_msec();
+        connection_dict["send_attempts"] = 1;
+        pending_peer_connections.push_back(connection_dict);
+
+        EOSGPacket packet;
+        packet.set_event(EVENT_REQUEST_CONNECTION);
+        packet.set_channel(CH_RELIABLE);
+        packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
+        packet.set_sender(unique_id);
+        packet.prepare();
+        
+        Error result = _send_to(data->RemoteUserId, packet);
+        if (result)
+            godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_poll] Couldn't send Error: ", result);
+    }
     Dictionary ret;
     ret["local_user_id"] = local_user_id_str;
     ret["remote_user_id"] = remote_user_id_str;
@@ -1090,6 +1157,8 @@ void EOSGMultiplayerPeer::remote_connection_closed_callback(const EOS_P2P_OnRemo
     if (_find_connection_request(remote_user_id_str, remote_user_id)) {
         pending_connection_requests.erase(remote_user_id);
     }
+
+    _remove_pending_peer_connection(remote_user_id_str);
 
     //Attempt to remove peer;
     int peer_id = get_peer_id(remote_user_id_str);

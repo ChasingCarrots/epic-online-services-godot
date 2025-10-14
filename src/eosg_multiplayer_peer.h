@@ -3,6 +3,8 @@
 #include "eos_p2p.h"
 #include "godot_cpp/classes/multiplayer_peer_extension.hpp"
 #include "godot_cpp/templates/hash_map.hpp"
+#include "godot_cpp/variant/dictionary.hpp"
+#include "godot_cpp/variant/typed_array.hpp"
 #include "utils.h"
 #include <memory>
 
@@ -21,7 +23,9 @@ private:
     enum Event {
         EVENT_STORE_PACKET,
         EVENT_RECIEVE_PEER_ID,
-        EVENT_MESH_CONNECTION_REQUEST
+        EVENT_MESH_CONNECTION_REQUEST,
+        EVENT_REQUEST_CONNECTION,
+        EVENT_ACCEPT_CONNECTION
     };
 
     enum {
@@ -198,6 +202,11 @@ private:
     TransferMode _convert_eos_reliability_to_transfer_mode(EOS_EPacketReliability reliability) const;
     void _disconnect_remote_user(const EOS_ProductUserId &remote_user);
     void _clear_peer_packet_queue(int p_id);
+    bool _remove_pending_peer_connection(const String &remote_user);
+
+    
+    const int MAX_SEND_ATTEMPTS = 10;
+    const int REQ_SEND_FREQ = 500;
 
     static EOS_ProductUserId s_local_user_id;
 
@@ -217,6 +226,7 @@ private:
 
     EOSGSocket socket;
     List<EOS_ProductUserId> pending_connection_requests;
+    TypedArray<Dictionary> pending_peer_connections;
 
     static void _bind_methods();
 
