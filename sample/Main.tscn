@@ -255,7 +255,6 @@ grow_vertical = 2
 script = ExtResource("21_einjf")
 
 [node name="MoveJoystick" type="Control" parent="Network/Game/CanvasLayer/Joysticks"]
-layout_mode = 3
 anchors_preset = 0
 offset_left = 181.0
 offset_top = 390.0
@@ -274,7 +273,6 @@ action_up = "move_up"
 action_down = "move_down"
 
 [node name="ShootJoystick" type="Control" parent="Network/Game/CanvasLayer/Joysticks"]
-layout_mode = 3
 anchors_preset = 0
 offset_left = 938.0
 offset_top = 401.0
