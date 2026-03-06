@@ -1,4 +1,5 @@
 #include "eosg_lobby_details.h"
+#include "godot_cpp/variant/utility_functions.hpp"
 #include "ieos.h"
 using namespace godot;
 
@@ -25,8 +26,10 @@ void IEOS::lobby_interface_create_lobby(Ref<RefCounted> p_options) {
 	options.RTCRoomJoinActionType = static_cast<EOS_ELobbyRTCRoomJoinActionType>(rtc_room_join_action_type);
 
     Variant local_rtc_options = p_options->get("local_rtc_options");
+    EOS_Lobby_LocalRTCOptions localRTCOptions;
+    memset(&localRTCOptions, 0, sizeof(localRTCOptions));
     if (options.bEnableRTCRoom && local_rtc_options.get_type() != Variant::NIL) {
-        EOS_Lobby_LocalRTCOptions localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
+        localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
         options.LocalRTCOptions = &localRTCOptions;
     }
     if (lobby_id.length() != 0) {
@@ -69,8 +72,10 @@ void IEOS::lobby_interface_join_rtc_room(Ref<RefCounted> p_options) {
     options.LocalUserId = eosg_string_to_product_user_id(local_user_id.get_data());
     options.LobbyId = lobby_id.get_data();
     Variant local_rtc_options = p_options->get("local_rtc_options");
+    EOS_Lobby_LocalRTCOptions localRTCOptions;
+    memset(&localRTCOptions, 0, sizeof(localRTCOptions));
     if (local_rtc_options.get_type() != Variant::NIL) {
-        EOS_Lobby_LocalRTCOptions localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
+        localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
         options.LocalRTCOptions = &localRTCOptions;
     }
     p_options->reference();
@@ -150,8 +155,10 @@ void IEOS::lobby_interface_join_lobby(Ref<RefCounted> p_options) {
     options.bPresenceEnabled = VARIANT_TO_EOS_BOOL(p_options->get("presence_enabled"));
 	options.RTCRoomJoinActionType = static_cast<EOS_ELobbyRTCRoomJoinActionType>(rtc_room_join_action_type);
     Variant local_rtc_options = p_options->get("local_rtc_options");
+    EOS_Lobby_LocalRTCOptions localRTCOptions;
+    memset(&localRTCOptions, 0, sizeof(localRTCOptions));
     if (local_rtc_options.get_type() != Variant::NIL) {
-        EOS_Lobby_LocalRTCOptions localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
+        localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
         options.LocalRTCOptions = &localRTCOptions;
     }
     options.LobbyDetailsHandle = p_lobby_details->get_internal();
@@ -183,8 +190,10 @@ void IEOS::lobby_interface_join_lobby_by_id(Ref<RefCounted> p_options) {
     options.bPresenceEnabled = VARIANT_TO_EOS_BOOL(p_options->get("presence_enabled"));
 	options.RTCRoomJoinActionType = static_cast<EOS_ELobbyRTCRoomJoinActionType>(rtc_room_join_action_type);
     Variant local_rtc_options = p_options->get("local_rtc_options");
+    EOS_Lobby_LocalRTCOptions localRTCOptions;
+    memset(&localRTCOptions, 0, sizeof(localRTCOptions));
     if (local_rtc_options.get_type() != Variant::NIL) {
-        EOS_Lobby_LocalRTCOptions localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
+        localRTCOptions = eosg_variant_to_lobby_local_rtc_options(local_rtc_options);
         options.LocalRTCOptions = &localRTCOptions;
     }
     p_options->reference();

@@ -700,7 +700,7 @@ Dictionary IEOS::platform_interface_get_active_country_code(const String &p_loca
     if (res == EOS_EResult::EOS_Success) {
         ret["country_code"] = String(OutBuffer);
     }
-
+    memfree(OutBuffer);
     return ret;
 }
 
@@ -719,7 +719,7 @@ Dictionary IEOS::platform_interface_get_active_locale_code(const String &p_user_
     if (res == EOS_EResult::EOS_Success) {
         ret["locale_code"] = String(OutBuffer);
     }
-
+    memfree(OutBuffer);
     return ret;
 }
 
@@ -736,7 +736,8 @@ Dictionary IEOS::platform_interface_get_override_country_code() {
     if (res == EOS_EResult::EOS_Success) {
         dict["country_code"] = String(OutBuffer);
     }
-
+    memfree(OutBuffer);
+    memfree(OutBufferLength);
     return dict;
 }
 
@@ -753,7 +754,8 @@ Dictionary IEOS::platform_interface_get_override_locale_code() {
     if (res == EOS_EResult::EOS_Success) {
         dict["locale_code"] = String(OutBuffer);
     }
-
+    memfree(OutBuffer);
+    memfree(OutBufferLength);
     return dict;
 }
 
