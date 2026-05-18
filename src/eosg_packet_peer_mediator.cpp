@@ -295,7 +295,11 @@ int EOSGPacketPeerMediator::get_packet_count_from_remote_user(const String &remo
 bool EOSGPacketPeerMediator::next_packet_is_peer_id_packet(const String &socket_id) {
     EOSApiLockGuard eos_api_lockguard;
 
-    ERR_FAIL_COND_V_MSG(!socket_packet_queues.has(socket_id), false, "Failed to check next packet. Socket \"%s\" does not exist.");
+    ERR_FAIL_COND_V_MSG(
+        !socket_packet_queues.has(socket_id), 
+        false, 
+        vformat("Failed to check next packet. Socket \"%s\" does not exist.", socket_id)
+    );
     if (socket_packet_queues[socket_id].size() == 0)
         return false;
     PacketData packet = socket_packet_queues[socket_id][0];

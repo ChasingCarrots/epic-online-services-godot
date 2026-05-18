@@ -688,7 +688,6 @@ void EOSGMultiplayerPeer::_poll() {
             //Our connection attempts failed so we need to remove the pending connection and disconnect the remote user we where trying to connect to.
             if (attempt > MAX_SEND_ATTEMPTS) {
                 godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_poll] Connection Request failed ", MAX_SEND_ATTEMPTS, " times we will not try again...");
-                pending_peer_connections.remove_at(i);
                 _disconnect_remote_user(eosg_string_to_product_user_id(remote_user_id.utf8())); 
                 continue;
             }
@@ -697,13 +696,14 @@ void EOSGMultiplayerPeer::_poll() {
             connection["send_attempts"] = attempt + 1;
             pending_peer_connections[i] = connection;
 
-            godot::UtilityFunctions::print("[EOSGMultiplayerPeer::_poll] Sending connection request. Attempt:  ", attempt);
+            godot::UtilityFunctions::print("[", socket.get_name(), "] [EOSGMultiplayerPeer::_poll] Sending connection request for Socket ID: ", socket.get_name(),". Attempt:  ", attempt);
             EOSGPacket packet;
             packet.set_event(EVENT_REQUEST_CONNECTION);
             packet.set_channel(CH_RELIABLE);
             packet.set_reliability(EOS_EPacketReliability::EOS_PR_ReliableUnordered);
             packet.set_sender(unique_id);
             packet.prepare();
+            
             Error result = _send_to(eosg_string_to_product_user_id(remote_user_id.utf8()), packet);
         }
     }
@@ -1078,11 +1078,11 @@ bool EOSGMultiplayerPeer::_remove_pending_peer_connection(const String &remote_u
     for (int i = 0; i < pending_peer_connections.size(); ++i) {
         godot::Dictionary connection = pending_peer_connections[i];
         if (connection.has("remote_user_id") && connection["remote_user_id"] == remote_user) {
+            godot::UtilityFunctions::print("[EOSGMultiplayerPeer::_remove_pending_peer_connection] Removed pending peer for user: ",remote_user);
             pending_peer_connections.remove_at(i);
             return true;
         }
     }
-    godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_remove_pending_peer_connection] Couldn't remove pending connection for user: ",remote_user);
     return false;
 }
 
@@ -1122,7 +1122,7 @@ void EOSGMultiplayerPeer::peer_connection_established_callback(const EOS_P2P_OnP
         
         Error result = _send_to(data->RemoteUserId, packet);
         if (result)
-            godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::_poll] Couldn't send Error: ", result);
+            godot::UtilityFunctions::printerr("[EOSGMultiplayerPeer::peer_connection_established_callback] Couldn't send Error: ", result);
     }
     Dictionary ret;
     ret["local_user_id"] = local_user_id_str;
