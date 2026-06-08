@@ -744,7 +744,12 @@ void EOSGMultiplayerPeer::_poll() {
                 packet.set_event(event);
                 packet.set_sender(peer_id);
                 packet.set_reliability(reliability);
-                packet.set_channel(packet_data.get_channel());
+                int channel = packet_data.get_channel();
+                if (channel >= CH_MAX) {
+                    // the channel number was increased by CH_MAX - 1 while sending, so we have to decrease it here
+                    channel -= CH_MAX - 1;
+                }
+                packet.set_channel(channel);
 
                 socket.push_packet(packet);
                 break;
