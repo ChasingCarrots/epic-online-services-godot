@@ -41,7 +41,7 @@ void IEOS::mods_interface_enumerate_mods(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["type"] = static_cast<int>(data->Type);
-        IEOS::get_singleton()->emit_signal("mods_interface_enumerate_mods_callback", ret);
+        IEOS::emit_signal_deferred("mods_interface_enumerate_mods_callback", ret);
     });
 }
 
@@ -69,7 +69,7 @@ void IEOS::mods_interface_install_mod(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["mod"] = eosg_mods_mod_identifier_to_dict(data->Mod);
-        IEOS::get_singleton()->emit_signal("mods_interface_install_mod_callback", ret);
+        IEOS::emit_signal_deferred("mods_interface_install_mod_callback", ret);
     });
 }
 
@@ -96,7 +96,7 @@ void IEOS::mods_interface_uninstall_mod(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["mod"] = eosg_mods_mod_identifier_to_dict(data->Mod);
-        IEOS::get_singleton()->emit_signal("mods_interface_uninstall_mod_callback", ret);
+        IEOS::emit_signal_deferred("mods_interface_uninstall_mod_callback", ret);
     });
 }
 
@@ -123,6 +123,6 @@ void IEOS::mods_interface_update_mod(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["mod"] = eosg_mods_mod_identifier_to_dict(data->Mod);
-        IEOS::get_singleton()->emit_signal("mods_interface_update_mod_callback", ret);
+        IEOS::emit_signal_deferred("mods_interface_update_mod_callback", ret);
     });
 }

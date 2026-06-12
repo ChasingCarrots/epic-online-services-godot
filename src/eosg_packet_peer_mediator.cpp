@@ -116,7 +116,8 @@ void EOSGPacketPeerMediator::_on_process_frame() {
                 socket_packet_queues[socket_id_str].push_back(packet);
             }
             if (get_total_packet_count() >= max_queue_size) {
-                emit_signal("packet_queue_full");
+                // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+                call_deferred("emit_signal", "packet_queue_full");
                 break;
             }
         }
@@ -363,7 +364,8 @@ void EOS_CALL EOSGPacketPeerMediator::_on_remote_connection_closed(const EOS_P2P
             ret["local_user_id"] = e->get().local_user_id;
             ret["remote_user_id"] = e->get().remote_user_id;
             ret["socket_id"] = e->get().socket_name;
-            singleton->emit_signal("connection_request_removed", ret);
+            // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+            singleton->call_deferred("emit_signal", "connection_request_removed", ret);
             e->erase();
             break;
         }
@@ -395,7 +397,8 @@ void EOS_CALL EOSGPacketPeerMediator::_on_incoming_connection_request(const EOS_
         ret["local_user_id"] = request_data.local_user_id;
         ret["remote_user_id"] = request_data.remote_user_id;
         ret["socket_id"] = request_data.socket_name;
-        singleton->emit_signal("connection_request_received", ret);
+        // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+        singleton->call_deferred("emit_signal", "connection_request_received", ret);
         return;
     }
     singleton->active_peers[request_data.socket_name]->connection_request_callback(request_data);
@@ -524,7 +527,8 @@ void EOSGPacketPeerMediator::_forward_pending_connection_requests(EOSGMultiplaye
         ret["local_user_id"] = e->get().local_user_id;
         ret["remote_user_id"] = e->get().remote_user_id;
         ret["socket_id"] = e->get().socket_name;
-        emit_signal("connection_request_removed", ret);
+        // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+        call_deferred("emit_signal", "connection_request_removed", ret);
         e->erase();
     }
 }

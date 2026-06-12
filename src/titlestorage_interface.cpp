@@ -23,7 +23,7 @@ void IEOS::titlestorage_interface_query_file(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_query_file_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_query_file_callback", ret);
     });
 }
 
@@ -55,7 +55,7 @@ void IEOS::titlestorage_interface_query_file_list(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["file_count"] = static_cast<int>(data->FileCount);
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_query_file_list_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_query_file_list_callback", ret);
     });
 }
 
@@ -132,7 +132,7 @@ int IEOS::titlestorage_interface_delete_cache(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_delete_cache_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_delete_cache_callback", ret);
     });
 
     return static_cast<int>(res);
@@ -167,7 +167,7 @@ Variant IEOS::titlestorage_interface_read_file(Ref<RefCounted> p_options) {
         memcpy(data_chunk.ptrw(), data->DataChunk, data->DataChunkLengthBytes);
         ret["data_chunk"] = data_chunk;
 
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_read_file_data_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_read_file_data_callback", ret);
         // TODO: emit the signal on the EOSGFileTransferRequest object instead of IEOS
         return EOS_TitleStorage_EReadResult::EOS_TS_RR_ContinueReading;
     };
@@ -179,7 +179,7 @@ Variant IEOS::titlestorage_interface_read_file(Ref<RefCounted> p_options) {
         ret["filename"] = data->Filename;
         ret["bytes_transferred"] = static_cast<int>(data->BytesTransferred);
         ret["total_file_size_bytes"] = static_cast<int>(data->TotalFileSizeBytes);
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_file_transfer_progress_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_file_transfer_progress_callback", ret);
         // TODO: emit the signal on the EOSGFileTransferRequest object instead of IEOS
     };
     p_options->reference();
@@ -192,7 +192,7 @@ Variant IEOS::titlestorage_interface_read_file(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["filename"] = data->Filename;
-        IEOS::get_singleton()->emit_signal("titlestorage_interface_read_file_callback", ret);
+        IEOS::emit_signal_deferred("titlestorage_interface_read_file_callback", ret);
     });
 
     return eosg_titlestorage_file_tranfer_request_to_wrapper(fileTranferRequest);

@@ -9,7 +9,7 @@ void IEOS::p2p_interface_query_nat_type() {
         Dictionary ret;
         ret["result_code"] = static_cast<int>(data->ResultCode);
         ret["nat_type"] = static_cast<int>(data->NATType);
-        get_singleton()->emit_signal("p2p_interface_query_nat_type_callback", ret);
+        IEOS::emit_signal_deferred("p2p_interface_query_nat_type_callback", ret);
     });
 }
 

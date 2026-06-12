@@ -66,7 +66,7 @@ void IEOS::connect_interface_login(Ref<RefCounted> p_options) {
             ret["pending"] = false;
         }
 
-        IEOS::get_singleton()->emit_signal("connect_interface_login_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_login_callback", ret);
     });
 }
 
@@ -89,7 +89,7 @@ void IEOS::connect_interface_logout(Ref<RefCounted> p_options) {
 
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_logout_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_logout_callback", ret);
     });
 }
 
@@ -211,7 +211,7 @@ void IEOS::connect_interface_create_device_id(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("connect_interface_create_device_id_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_create_device_id_callback", ret);
     });
 }
 
@@ -229,7 +229,7 @@ void IEOS::connect_interface_delete_device_id(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("connect_interface_delete_device_id_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_delete_device_id_callback", ret);
     });
 }
 
@@ -254,7 +254,7 @@ void IEOS::connect_interface_create_user(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
 
-        IEOS::get_singleton()->emit_signal("connect_interface_create_user_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_create_user_callback", ret);
     });
 }
 
@@ -364,7 +364,7 @@ void IEOS::connect_interface_query_product_user_id_mappings(Ref<RefCounted> p_op
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_query_product_user_id_mappings_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_query_product_user_id_mappings_callback", ret);
     });
 }
 
@@ -401,7 +401,7 @@ void IEOS::connect_interface_query_external_account_mappings(Ref<RefCounted> p_o
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_query_external_account_mappings_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_query_external_account_mappings_callback", ret);
     });
 }
 
@@ -428,7 +428,7 @@ void IEOS::connect_interface_link_account(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_link_account_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_link_account_callback", ret);
     });
 }
 
@@ -460,7 +460,7 @@ void IEOS::connect_interface_verify_id_token(Ref<RefCounted> p_options) {
         ret["is_account_info_present"] = EOSG_GET_BOOL(data->bIsAccountInfoPresent);
         ret["account_id_type"] = static_cast<int>(data->AccountIdType);
         ret["account_id"] = EOSG_GET_STRING(data->AccountId);
-        IEOS::get_singleton()->emit_signal("connect_interface_verify_id_token_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_verify_id_token_callback", ret);
     });
 }
 
@@ -495,7 +495,7 @@ void IEOS::connect_interface_transfer_device_id_account(Ref<RefCounted> p_option
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_transfer_device_id_account_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_transfer_device_id_account_callback", ret);
     });
 }
 
@@ -517,6 +517,6 @@ void IEOS::connect_interface_unlink_account(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("connect_interface_unlink_account_callback", ret);
+        IEOS::emit_signal_deferred("connect_interface_unlink_account_callback", ret);
     });
 }

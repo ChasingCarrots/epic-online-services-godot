@@ -52,7 +52,7 @@ void IEOS::auth_interface_login(Ref<RefCounted> p_options) {
             ret["pending"] = true;
             ret["success"] = false;
         }
-        IEOS::get_singleton()->emit_signal("auth_interface_login_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_login_callback", ret);
     });
 }
 
@@ -74,7 +74,7 @@ void IEOS::auth_interface_logout(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("auth_interface_logout_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_logout_callback", ret);
     });
 }
 
@@ -137,7 +137,7 @@ void IEOS::auth_interface_delete_persistent_auth(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("auth_interface_delete_persistent_auth_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_delete_persistent_auth_callback", ret);
     });
 }
 
@@ -214,7 +214,7 @@ void IEOS::auth_interface_query_id_token(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_account_id"] = eosg_epic_account_id_to_string(data->TargetAccountId);
-        IEOS::get_singleton()->emit_signal("auth_interface_query_id_token_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_query_id_token_callback", ret);
     });
 }
 
@@ -254,7 +254,7 @@ void IEOS::auth_interface_verify_id_token(Ref<RefCounted> p_options) {
         ret["external_account_id"] = EOSG_GET_STRING(data->ExternalAccountId);
         ret["external_account_display_name"] = EOSG_GET_STRING(data->ExternalAccountDisplayName);
         ret["platform"] = EOSG_GET_STRING(data->Platform);
-        IEOS::get_singleton()->emit_signal("auth_interface_verify_id_token_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_verify_id_token_callback", ret);
     });
 }
 
@@ -284,7 +284,7 @@ void IEOS::auth_interface_link_account(Ref<RefCounted> p_options) {
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["pin_grant_info"] = eosg_auth_pin_grant_info_to_dict(data->PinGrantInfo);
         ret["selected_account_id"] = eosg_epic_account_id_to_string(data->SelectedAccountId);
-        IEOS::get_singleton()->emit_signal("auth_interface_link_account_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_link_account_callback", ret);
     });
 }
 
@@ -328,6 +328,6 @@ void IEOS::auth_interface_verify_user_auth(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("auth_interface_verify_user_auth_callback", ret);
+        IEOS::emit_signal_deferred("auth_interface_verify_user_auth_callback", ret);
     });
 }

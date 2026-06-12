@@ -22,7 +22,7 @@ void IEOS::friends_interface_accept_invite(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("friends_interface_accept_invite_callback", ret);
+        IEOS::emit_signal_deferred("friends_interface_accept_invite_callback", ret);
     });
 }
 
@@ -86,7 +86,7 @@ void IEOS::friends_interface_query_friends(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("friends_interface_query_friends_callback", ret);
+        IEOS::emit_signal_deferred("friends_interface_query_friends_callback", ret);
     });
 }
 
@@ -111,7 +111,7 @@ void IEOS::friends_interface_reject_invite(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("friends_interface_reject_invite_callback", ret);
+        IEOS::emit_signal_deferred("friends_interface_reject_invite_callback", ret);
     });
 }
 
@@ -136,7 +136,7 @@ void IEOS::friends_interface_send_invite(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("friends_interface_send_invite_callback", ret);
+        IEOS::emit_signal_deferred("friends_interface_send_invite_callback", ret);
     });
 }
 

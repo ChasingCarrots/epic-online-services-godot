@@ -114,7 +114,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["user_id"] = eosg_product_user_id_to_string(data->UserId);
             ret["achievement_id"] = EOSG_GET_STRING(data->AchievementId);
             ret["unlock_time"] = data->UnlockTime;
-            IEOS::get_singleton()->emit_signal("achievements_interface_achievements_unlocked_v2_callback", ret);
+            IEOS::emit_signal_deferred("achievements_interface_achievements_unlocked_v2_callback", ret);
         });
     }
 
@@ -131,7 +131,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
             ret["prev_status"] = static_cast<int>(data->PrevStatus);
             ret["current_status"] = static_cast<int>(data->CurrentStatus);
-            IEOS::get_singleton()->emit_signal("auth_interface_login_status_changed", ret);
+            IEOS::emit_signal_deferred("auth_interface_login_status_changed", ret);
         });
     }
 
@@ -146,7 +146,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
         EOS_Connect_AddNotifyAuthExpiration(s_connectInterface, &notifyAuthExpirationOptions, nullptr, [](const EOS_Connect_AuthExpirationCallbackInfo *data) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-            IEOS::get_singleton()->emit_signal("connect_interface_auth_expiration", ret);
+            IEOS::emit_signal_deferred("connect_interface_auth_expiration", ret);
         });
         EOS_Connect_AddNotifyLoginStatusChangedOptions notifyConnectLoginStatusChangedOptions;
         memset(&notifyConnectLoginStatusChangedOptions, 0, sizeof(notifyConnectLoginStatusChangedOptions));
@@ -156,7 +156,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["previous_status"] = static_cast<int>(data->PreviousStatus);
             ret["current_status"] = static_cast<int>(data->CurrentStatus);
-            IEOS::get_singleton()->emit_signal("connect_interface_login_status_changed", ret);
+            IEOS::emit_signal_deferred("connect_interface_login_status_changed", ret);
         });
     }
 
@@ -173,7 +173,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["custom_invite_id"] = EOSG_GET_STRING(data->CustomInviteId);
             ret["payload"] = EOSG_GET_STRING(data->Payload);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_custom_invite_received_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_custom_invite_received_callback", ret);
         });
         EOS_CustomInvites_AddNotifyCustomInviteAcceptedOptions notifyCustomInviteAcceptedOptions;
         notifyCustomInviteAcceptedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYCUSTOMINVITEACCEPTED_API_LATEST;
@@ -183,7 +183,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["custom_invite_id"] = EOSG_GET_STRING(data->CustomInviteId);
             ret["payload"] = EOSG_GET_STRING(data->Payload);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_custom_invite_accepted_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_custom_invite_accepted_callback", ret);
         });
         EOS_CustomInvites_AddNotifyCustomInviteRejectedOptions notifyCustomInviteRejectedOptions;
         notifyCustomInviteRejectedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYCUSTOMINVITEREJECTED_API_LATEST;
@@ -193,7 +193,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["custom_invite_id"] = EOSG_GET_STRING(data->CustomInviteId);
             ret["payload"] = EOSG_GET_STRING(data->Payload);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_custom_invite_rejected_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_custom_invite_rejected_callback", ret);
         });
         EOS_CustomInvites_AddNotifyRequestToJoinResponseReceivedOptions notifyCustomRequestToJoinResponseReceivedOptions;
         notifyCustomRequestToJoinResponseReceivedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYREQUESTTOJOINRESPONSERECEIVED_API_LATEST;
@@ -202,7 +202,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["from_user_id"] = eosg_product_user_id_to_string(data->FromUserId);
             ret["to_user_id"] = eosg_product_user_id_to_string(data->ToUserId);
             ret["response"] = static_cast<int>(data->Response);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_request_to_join_response_received_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_request_to_join_response_received_callback", ret);
         });
         EOS_CustomInvites_AddNotifyRequestToJoinReceivedOptions notifyCustomRequestToJoinReceivedOptions;
         notifyCustomRequestToJoinReceivedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYREQUESTTOJOINRECEIVED_API_LATEST;
@@ -210,7 +210,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["from_user_id"] = eosg_product_user_id_to_string(data->FromUserId);
             ret["to_user_id"] = eosg_product_user_id_to_string(data->ToUserId);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_request_to_join_received_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_request_to_join_received_callback", ret);
         });
         EOS_CustomInvites_AddNotifyRequestToJoinAcceptedOptions notifyCustomRequestToJoinAcceptedOptions;
         notifyCustomRequestToJoinAcceptedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYREQUESTTOJOINACCEPTED_API_LATEST;
@@ -218,7 +218,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_request_to_join_accepted_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_request_to_join_accepted_callback", ret);
         });
         EOS_CustomInvites_AddNotifyRequestToJoinRejectedOptions notifyCustomRequestToJoinRejectedOptions;
         notifyCustomRequestToJoinRejectedOptions.ApiVersion = EOS_CUSTOMINVITES_ADDNOTIFYREQUESTTOJOINREJECTED_API_LATEST;
@@ -226,7 +226,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("custom_invites_interface_request_to_join_rejected_callback", ret);
+            IEOS::emit_signal_deferred("custom_invites_interface_request_to_join_rejected_callback", ret);
         });
     }
 
@@ -248,7 +248,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
             ret["previous_status"] = static_cast<int>(data->PreviousStatus);
             ret["current_status"] = static_cast<int>(data->CurrentStatus);
-            IEOS::get_singleton()->emit_signal("friends_interface_friends_update_callback", ret);
+            IEOS::emit_signal_deferred("friends_interface_friends_update_callback", ret);
         });
         EOS_Friends_AddNotifyBlockedUsersUpdateOptions notifyBlockedUsersUpdateOptions;
         notifyBlockedUsersUpdateOptions.ApiVersion = EOS_FRIENDS_ADDNOTIFYBLOCKEDUSERSUPDATE_API_LATEST;
@@ -257,7 +257,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
             ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
             ret["blocked"] = EOSG_GET_BOOL(data->bBlocked);
-            IEOS::get_singleton()->emit_signal("friends_interface_blocked_users_update_callback", ret);
+            IEOS::emit_signal_deferred("friends_interface_blocked_users_update_callback", ret);
         });
     }
 
@@ -275,7 +275,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["date_of_birth"] = EOSG_GET_STRING(data->DateOfBirth);
             ret["is_minor"] = EOSG_GET_BOOL(data->bIsMinor);
             ret["parent_email"] = EOSG_GET_STRING(data->ParentEmail);
-            IEOS::get_singleton()->emit_signal("kws_interface_permissions_update_received_callback", ret);
+            IEOS::emit_signal_deferred("kws_interface_permissions_update_received_callback", ret);
         });
     }
 
@@ -294,7 +294,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
         EOS_Lobby_AddNotifyLobbyUpdateReceived(s_lobbyInterface, &notifyLobbyUpdateReceivedOptions, nullptr, [](const EOS_Lobby_LobbyUpdateReceivedCallbackInfo *data) {
             Dictionary ret;
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_update_received_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_update_received_callback", ret);
         });
         EOS_Lobby_AddNotifyLobbyMemberUpdateReceivedOptions notifyLobbyMemberUpdateReceivedOptions;
         notifyLobbyMemberUpdateReceivedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLOBBYMEMBERUPDATERECEIVED_API_LATEST;
@@ -302,7 +302,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_member_update_received_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_member_update_received_callback", ret);
         });
         EOS_Lobby_AddNotifyLobbyMemberStatusReceivedOptions notifyLobbyMemberStatusReceivedOptions;
         notifyLobbyMemberStatusReceivedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLOBBYMEMBERSTATUSRECEIVED_API_LATEST;
@@ -311,7 +311,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["current_status"] = static_cast<int>(data->CurrentStatus);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_member_status_received_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_member_status_received_callback", ret);
         });
         EOS_Lobby_AddNotifyLobbyInviteReceivedOptions notifyLobbyInviteReceivedOptions;
         notifyLobbyInviteReceivedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLOBBYINVITERECEIVED_API_LATEST;
@@ -320,7 +320,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["invite_id"] = EOSG_GET_STRING(data->InviteId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_invite_received_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_invite_received_callback", ret);
         });
         EOS_Lobby_AddNotifyLobbyInviteAcceptedOptions notifyLobbyInviteAcceptedOptions;
         notifyLobbyInviteAcceptedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLOBBYINVITEACCEPTED_API_LATEST;
@@ -330,7 +330,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["invite_id"] = EOSG_GET_STRING(data->InviteId);
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_invite_accepted_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_invite_accepted_callback", ret);
         });
         EOS_Lobby_AddNotifyLobbyInviteRejectedOptions notifyLobbyInviteRejectedOptions;
         notifyLobbyInviteRejectedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLOBBYINVITEREJECTED_API_LATEST;
@@ -340,7 +340,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
             ret["invite_id"] = EOSG_GET_STRING(data->InviteId);
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_lobby_invite_rejected_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_lobby_invite_rejected_callback", ret);
         });
         EOS_Lobby_AddNotifyJoinLobbyAcceptedOptions notifyJoinLobbyAcceptedOptions;
         notifyJoinLobbyAcceptedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYJOINLOBBYACCEPTED_API_LATEST;
@@ -348,7 +348,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["ui_event_id"] = data->UiEventId;
-            IEOS::get_singleton()->emit_signal("lobby_interface_join_lobby_accepted_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_join_lobby_accepted_callback", ret);
         });
         EOS_Lobby_AddNotifySendLobbyNativeInviteRequestedOptions notifySendLobbyNativeInviteRequestedOptions;
         notifySendLobbyNativeInviteRequestedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYSENDLOBBYNATIVEINVITEREQUESTED_API_LATEST;
@@ -359,7 +359,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_native_account_type"] = EOSG_GET_STRING(data->TargetNativeAccountType);
             ret["target_native_account_id"] = EOSG_GET_STRING(data->TargetUserNativeAccountId);
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_send_lobby_native_invite_requested_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_send_lobby_native_invite_requested_callback", ret);
         });
         EOS_Lobby_AddNotifyRTCRoomConnectionChangedOptions notifyRTCRoomConnectionChangedOptions;
         notifyRTCRoomConnectionChangedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYRTCROOMCONNECTIONCHANGED_API_LATEST;
@@ -369,7 +369,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["is_connected"] = EOSG_GET_BOOL(data->bIsConnected);
             ret["disconnect_reason"] = static_cast<int>(data->DisconnectReason);
-            IEOS::get_singleton()->emit_signal("lobby_interface_rtc_room_connection_changed_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_rtc_room_connection_changed_callback", ret);
         });
         EOS_Lobby_AddNotifyLeaveLobbyRequestedOptions notifyLeaveLobbyRequestedOptions;
         notifyLeaveLobbyRequestedOptions.ApiVersion = EOS_LOBBY_ADDNOTIFYLEAVELOBBYREQUESTED_API_LATEST;
@@ -377,7 +377,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-            IEOS::get_singleton()->emit_signal("lobby_interface_leave_lobby_requested_callback", ret);
+            IEOS::emit_signal_deferred("lobby_interface_leave_lobby_requested_callback", ret);
         });
     }
 
@@ -405,7 +405,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["overflow_packet_size_bytes"] = data->OverflowPacketSizeBytes;
             ret["packet_queue_current_size_bytes"] = data->PacketQueueCurrentSizeBytes;
             ret["packet_queue_max_size_bytes"] = data->PacketQueueMaxSizeBytes;
-            IEOS::get_singleton()->emit_signal("p2p_interface_incoming_packet_queue_full", ret);
+            IEOS::emit_signal_deferred("p2p_interface_incoming_packet_queue_full", ret);
         });
     }
 
@@ -425,7 +425,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
             ret["presence_user_id"] = eosg_epic_account_id_to_string(data->PresenceUserId);
-            IEOS::get_singleton()->emit_signal("presence_interface_presence_changed_callback", ret);
+            IEOS::emit_signal_deferred("presence_interface_presence_changed_callback", ret);
         });
         EOS_Presence_AddNotifyJoinGameAcceptedOptions notifyJoinGameAcceptedOptions;
         notifyJoinGameAcceptedOptions.ApiVersion = EOS_PRESENCE_ADDNOTIFYJOINGAMEACCEPTED_API_LATEST;
@@ -435,7 +435,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
             ret["ui_event_id"] = data->UiEventId;
             ret["join_info"] = EOSG_GET_STRING(data->JoinInfo);
-            IEOS::get_singleton()->emit_signal("presence_interface_join_game_accepted_callback", ret);
+            IEOS::emit_signal_deferred("presence_interface_join_game_accepted_callback", ret);
         });
     }
 
@@ -466,7 +466,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["invite_id"] = EOSG_GET_STRING(data->InviteId);
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("sessions_interface_session_invite_received_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_session_invite_received_callback", ret);
         });
         EOS_Sessions_AddNotifySessionInviteAcceptedOptions notifySessionInviteAcceptedOptions;
         notifySessionInviteAcceptedOptions.ApiVersion = EOS_SESSIONS_ADDNOTIFYSESSIONINVITEACCEPTED_API_LATEST;
@@ -476,7 +476,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["session_id"] = EOSG_GET_STRING(data->SessionId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("sessions_interface_session_invite_accepted_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_session_invite_accepted_callback", ret);
         });
         EOS_Sessions_AddNotifySessionInviteRejectedOptions notifySessionInviteRejectedOptions;
         notifySessionInviteRejectedOptions.ApiVersion = EOS_SESSIONS_ADDNOTIFYSESSIONINVITEREJECTED_API_LATEST;
@@ -486,7 +486,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["session_id"] = EOSG_GET_STRING(data->SessionId);
             ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-            IEOS::get_singleton()->emit_signal("sessions_interface_session_invite_rejected_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_session_invite_rejected_callback", ret);
         });
         EOS_Sessions_AddNotifyJoinSessionAcceptedOptions notifyJoinSessionAcceptedOptions;
         notifyJoinSessionAcceptedOptions.ApiVersion = EOS_SESSIONS_ADDNOTIFYJOINSESSIONACCEPTED_API_LATEST;
@@ -494,7 +494,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["ui_event_id"] = data->UiEventId;
-            IEOS::get_singleton()->emit_signal("sessions_interface_join_session_accepted_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_join_session_accepted_callback", ret);
         });
         EOS_Sessions_AddNotifyLeaveSessionRequestedOptions notifyLeaveSessionRequestedOptions;
         notifyLeaveSessionRequestedOptions.ApiVersion = EOS_SESSIONS_ADDNOTIFYLEAVESESSIONREQUESTED_API_LATEST;
@@ -502,7 +502,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
             ret["session_name"] = EOSG_GET_STRING(data->SessionName);
-            IEOS::get_singleton()->emit_signal("sessions_interface_leave_session_requested_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_leave_session_requested_callback", ret);
         });
         EOS_Sessions_AddNotifySendSessionNativeInviteRequestedOptions notifySendSessionNativeInviteRequestedOptions;
         notifySendSessionNativeInviteRequestedOptions.ApiVersion = EOS_SESSIONS_ADDNOTIFYSENDSESSIONNATIVEINVITEREQUESTED_API_LATEST;
@@ -513,7 +513,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["target_native_account_type"] = EOSG_GET_STRING(data->TargetNativeAccountType);
             ret["target_user_native_account_id"] = EOSG_GET_STRING(data->TargetUserNativeAccountId);
             ret["ui_event_id"] = data->UiEventId;
-            IEOS::get_singleton()->emit_signal("sessions_interface_send_session_native_invite_requested_callback", ret);
+            IEOS::emit_signal_deferred("sessions_interface_send_session_native_invite_requested_callback", ret);
         });
     }
 
@@ -537,7 +537,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
         notifyAudioDevicesChangedOptions.ApiVersion = EOS_RTCAUDIO_ADDNOTIFYAUDIODEVICESCHANGED_API_LATEST;
         EOS_RTCAudio_AddNotifyAudioDevicesChanged(s_rtcAudioInterface, &notifyAudioDevicesChangedOptions, nullptr, [](const EOS_RTCAudio_AudioDevicesChangedCallbackInfo *data) {
             Dictionary ret;
-            IEOS::get_singleton()->emit_signal("rtc_audio_audio_devices_changed", ret);
+            IEOS::emit_signal_deferred("rtc_audio_audio_devices_changed", ret);
         });
     }
 
@@ -562,13 +562,13 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["is_visible"] = EOSG_GET_BOOL(data->bIsVisible);
             ret["is_exclusive_input"] = EOSG_GET_BOOL(data->bIsExclusiveInput);
-            IEOS::get_singleton()->emit_signal("ui_interface_display_settings_updated_callback", ret);
+            IEOS::emit_signal_deferred("ui_interface_display_settings_updated_callback", ret);
         });
         EOS_UI_AddNotifyMemoryMonitorOptions notifyMemoryMonitorOptions;
         notifyMemoryMonitorOptions.ApiVersion = EOS_UI_ADDNOTIFYMEMORYMONITOR_API_LATEST;
         EOS_UI_AddNotifyMemoryMonitor(s_uiInterface, &notifyMemoryMonitorOptions, nullptr, [](const EOS_UI_MemoryMonitorCallbackInfo *data) {
             Dictionary ret;
-            IEOS::get_singleton()->emit_signal("ui_interface_memory_monitor_callback", ret);
+            IEOS::emit_signal_deferred("ui_interface_memory_monitor_callback", ret);
         });
     }
 
@@ -594,7 +594,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["client_handle"] = client_handle;
             ret["message_data"] = buffer;
-            IEOS::get_singleton()->emit_signal("anticheatserver_interface_message_to_client_callback", ret);
+            IEOS::emit_signal_deferred("anticheatserver_interface_message_to_client_callback", ret);
         });
 
         EOS_AntiCheatServer_AddNotifyClientActionRequiredOptions notifyClientActionRequiredOptions;
@@ -606,7 +606,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             ret["client_action"] = static_cast<int>(data->ClientAction);
             ret["action_reason_code"] = static_cast<int>(data->ActionReasonCode);
             ret["action_reason_details_string"] = EOSG_GET_STRING(data->ActionReasonDetailsString);
-            IEOS::get_singleton()->emit_signal("anticheatserver_interface_client_action_required_callback", ret);
+            IEOS::emit_signal_deferred("anticheatserver_interface_client_action_required_callback", ret);
         });
 
         EOS_AntiCheatServer_AddNotifyClientAuthStatusChangedOptions notifyClientAuthStatusChangedOptions;
@@ -616,7 +616,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             String client_handle = IEOS::get_singleton()->_anticheat_player_handle_to_id(data->ClientHandle);
             ret["client_handle"] = client_handle;
             ret["client_auth_status"] = static_cast<int>(data->ClientAuthStatus);
-            IEOS::get_singleton()->emit_signal("anticheatserver_interface_client_auth_status_changed_callback", ret);
+            IEOS::emit_signal_deferred("anticheatserver_interface_client_auth_status_changed_callback", ret);
         });
     }
 
@@ -634,7 +634,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
 
             Dictionary ret;
             ret["message_data"] = buffer;
-            IEOS::get_singleton()->emit_signal("anticheat_client_interface_message_to_server_callback", ret);
+            IEOS::emit_signal_deferred("anticheat_client_interface_message_to_server_callback", ret);
         });
 
         EOS_AntiCheatClient_AddNotifyMessageToPeerOptions notifyMessageToPeerOptions;
@@ -649,7 +649,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["client_handle"] = client_handle;
             ret["message_data"] = buffer;
-            IEOS::get_singleton()->emit_signal("anticheat_client_interface_message_to_peer_callback", ret);
+            IEOS::emit_signal_deferred("anticheat_client_interface_message_to_peer_callback", ret);
         });
 
         EOS_AntiCheatClient_AddNotifyPeerActionRequiredOptions notifyPeerActionRequiredOptions;
@@ -678,7 +678,7 @@ bool IEOS::platform_interface_create(Ref<RefCounted> p_options) {
             Dictionary ret;
             ret["violation_type"] = static_cast<int>(data->ViolationType);
             ret["violation_message"] = EOSG_GET_STRING(data->ViolationMessage);
-            IEOS::get_singleton()->emit_signal("anticheat_client_interface_client_integrity_violated_callback", ret);
+            IEOS::emit_signal_deferred("anticheat_client_interface_client_integrity_violated_callback", ret);
         });
     }
 
@@ -802,7 +802,7 @@ int IEOS::platform_interface_initialize(Ref<RefCounted> p_options) {
         logMsg["category"] = logMessage->Category;
         logMsg["message"] = logMessage->Message;
         logMsg["level"] = (int)logMessage->Level;
-        IEOS::get_singleton()->emit_signal("logging_interface_callback", logMsg);
+        IEOS::emit_signal_deferred("logging_interface_callback", logMsg);
     });
 
     if (setCallbackResult != EOS_EResult::EOS_Success) {

@@ -60,7 +60,7 @@ void IEOS::ui_interface_hide_friends(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("ui_interface_hide_friends_callback", ret);
+        IEOS::emit_signal_deferred("ui_interface_hide_friends_callback", ret);
     });
 }
 
@@ -110,7 +110,7 @@ void IEOS::ui_interface_show_friends(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("ui_interface_show_friends_callback", ret);
+        IEOS::emit_signal_deferred("ui_interface_show_friends_callback", ret);
     });
 }
 
@@ -148,7 +148,7 @@ void IEOS::ui_interface_show_block_player(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("ui_interface_show_block_player_callback", ret);
+        IEOS::emit_signal_deferred("ui_interface_show_block_player_callback", ret);
     });
 }
 
@@ -173,7 +173,7 @@ void IEOS::ui_interface_show_report_player(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("ui_interface_show_report_player_callback", ret);
+        IEOS::emit_signal_deferred("ui_interface_show_report_player_callback", ret);
     });
 }
 
@@ -291,6 +291,6 @@ void IEOS::ui_interface_show_native_profile(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("ui_interface_show_native_profile_callback", ret);
+        IEOS::emit_signal_deferred("ui_interface_show_native_profile_callback", ret);
     });
 }

@@ -90,7 +90,7 @@ void IEOS::stats_interface_ingest_stat(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("stats_interface_ingest_stat_callback", ret);
+        IEOS::emit_signal_deferred("stats_interface_ingest_stat_callback", ret);
     });
 }
 
@@ -132,6 +132,6 @@ void IEOS::stats_interface_query_stats(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("stats_interface_query_stats_callback", ret);
+        IEOS::emit_signal_deferred("stats_interface_query_stats_callback", ret);
     });
 }

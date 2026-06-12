@@ -28,7 +28,7 @@ void EOSGLobbySearch::find(const String &p_local_user_id) {
         Dictionary ret;
         ret["result_code"] = static_cast<int>(data->ResultCode);
         ret["client_data"] = Variant();
-        IEOS::get_singleton()->emit_signal("lobby_search_find_callback", ret);
+        IEOS::emit_signal_deferred("lobby_search_find_callback", ret);
     });
 }
 

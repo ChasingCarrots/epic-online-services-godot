@@ -43,7 +43,7 @@ void IEOS::rtc_interface_join_room(Ref<RefCounted> p_options) {
             }
         }
         ret["room_options"] = room_options;
-        IEOS::get_singleton()->emit_signal("rtc_interface_join_room_callback", ret);
+        IEOS::emit_signal_deferred("rtc_interface_join_room_callback", ret);
     });
 }
 
@@ -68,7 +68,7 @@ void IEOS::rtc_interface_leave_room(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
-        IEOS::get_singleton()->emit_signal("rtc_interface_leave_room_callback", ret);
+        IEOS::emit_signal_deferred("rtc_interface_leave_room_callback", ret);
     });
 }
 
@@ -99,7 +99,7 @@ void IEOS::rtc_interface_block_participant(Ref<RefCounted> p_options) {
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["blocked"] = EOSG_GET_BOOL(data->bBlocked);
-        IEOS::get_singleton()->emit_signal("rtc_interface_block_participant_callback", ret);
+        IEOS::emit_signal_deferred("rtc_interface_block_participant_callback", ret);
     });
 }
 
@@ -154,7 +154,7 @@ int IEOS::rtc_interface_add_notify_disconnected(Ref<RefCounted> p_options) {
         ret["result_code"] = static_cast<int>(data->ResultCode);
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
-        IEOS::get_singleton()->emit_signal("rtc_interface_disconnected", ret);
+        IEOS::emit_signal_deferred("rtc_interface_disconnected", ret);
     }));
 }
 
@@ -188,7 +188,7 @@ int IEOS::rtc_interface_add_notify_participant_status_changed(Ref<RefCounted> p_
             }
         }
         ret["participant_metadata"] = participant_metadata;
-        IEOS::get_singleton()->emit_signal("rtc_interface_participant_status_changed", ret);
+        IEOS::emit_signal_deferred("rtc_interface_participant_status_changed", ret);
     }));
 }
 
@@ -209,7 +209,7 @@ int IEOS::rtc_interface_add_notify_room_statistics_updated(Ref<RefCounted> p_opt
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["statistic"] = EOSG_GET_STRING(data->Statistic);
-        IEOS::get_singleton()->emit_signal("rtc_interface_room_statistics_updated", ret);
+        IEOS::emit_signal_deferred("rtc_interface_room_statistics_updated", ret);
     }));
 }
 

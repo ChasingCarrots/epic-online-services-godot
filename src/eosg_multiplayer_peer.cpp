@@ -1135,7 +1135,8 @@ void EOSGMultiplayerPeer::peer_connection_established_callback(const EOS_P2P_OnP
     ret["socket"] = data->SocketId->SocketName;
     ret["connection_type"] = connection_type;
     ret["network_type"] = network_type;
-    emit_signal("peer_connection_established", ret);
+    // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+    call_deferred("emit_signal", "peer_connection_established", ret);
 }
 
 /****************************************
@@ -1190,7 +1191,8 @@ void EOSGMultiplayerPeer::remote_connection_closed_callback(const EOS_P2P_OnRemo
     ret["remote_user_id"] = remote_user_id_str;
     ret["socket"] = data->SocketId->SocketName;
     ret["reason"] = reason;
-    emit_signal("peer_connection_closed", ret);
+    // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+    call_deferred("emit_signal", "peer_connection_closed", ret);
 }
 
 /****************************************
@@ -1207,7 +1209,8 @@ void EOSGMultiplayerPeer::peer_connection_interrupted_callback(const EOS_P2P_OnP
     ret["local_user_id"] = local_user_id_str;
     ret["remote_user_id"] = remote_user_id_str;
     ret["socket"] = data->SocketId->SocketName;
-    emit_signal("peer_connection_interrupted", ret);
+    // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+    call_deferred("emit_signal", "peer_connection_interrupted", ret);
 }
 
 /****************************************
@@ -1231,7 +1234,8 @@ void EOSGMultiplayerPeer::connection_request_callback(const ConnectionRequestDat
     ret["local_user_id"] = data.local_user_id;
     ret["remote_user_id"] = data.remote_user_id;
     ret["socket"] = String(data.socket_name);
-    emit_signal("incoming_connection_request", ret);
+    // Deferred: fires under the EOS API lock (see IEOS::emit_signal_deferred).
+    call_deferred("emit_signal", "incoming_connection_request", ret);
 
     if (!is_auto_accepting_connection_requests())
         return;

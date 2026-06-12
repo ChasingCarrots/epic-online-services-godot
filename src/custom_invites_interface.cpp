@@ -54,7 +54,7 @@ void IEOS::custom_invites_interface_send_custom_invite(Ref<RefCounted> p_options
             target_user_ids.append(eosg_product_user_id_to_string(data->TargetUserIds[i]));
         }
         ret["target_user_ids"] = target_user_ids;
-        IEOS::get_singleton()->emit_signal("custom_invites_interface_send_custom_invite_callback", ret);
+        IEOS::emit_signal_deferred("custom_invites_interface_send_custom_invite_callback", ret);
     });
 }
 
@@ -96,7 +96,7 @@ void IEOS::custom_invites_interface_send_request_to_join(Ref<RefCounted> p_optio
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
 
-        IEOS::get_singleton()->emit_signal("custom_invites_interface_send_request_to_join_callback", ret);
+        IEOS::emit_signal_deferred("custom_invites_interface_send_request_to_join_callback", ret);
     });
 }
 
@@ -126,7 +126,7 @@ void IEOS::custom_invites_interface_accept_request_to_join(Ref<RefCounted> p_opt
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
 
-        IEOS::get_singleton()->emit_signal("custom_invites_interface_accept_request_to_join_callback", ret);
+        IEOS::emit_signal_deferred("custom_invites_interface_accept_request_to_join_callback", ret);
     });
 }
 
@@ -153,6 +153,6 @@ void IEOS::custom_invites_interface_reject_request_to_join(Ref<RefCounted> p_opt
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
 
-        IEOS::get_singleton()->emit_signal("custom_invites_interface_reject_request_to_join_callback", ret);
+        IEOS::emit_signal_deferred("custom_invites_interface_reject_request_to_join_callback", ret);
     });
 }

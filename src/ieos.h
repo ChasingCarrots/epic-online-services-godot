@@ -94,6 +94,21 @@ public:
     static void tick();
     bool is_operation_complete(int result_code);
 
+    // Deferred signal emission - REQUIRED for every signal emitted while the
+    // global EOS API mutex (EOSApiLockGuard) may be held, i.e. in all IEOS
+    // methods and in every EOS SDK callback fired from EOS_Platform_Tick
+    // (inside tick()). Emitting synchronously there runs connected script WITH
+    // the lock held, which deadlocks against any thread that takes its own
+    // lock and then calls into the EOS API (e.g. a game thread polling an
+    // EOSGMultiplayerPeer). Deferring means script always runs later in the
+    // frame on a clean stack, without the EOS lock. call_deferred is also
+    // thread-safe, which covers callbacks invoked from EOS SDK internal
+    // threads (e.g. logging).
+    template <typename... Args>
+    static void emit_signal_deferred(const StringName &p_signal, const Args &...p_args) {
+        get_singleton()->call_deferred("emit_signal", p_signal, p_args...);
+    }
+
     // -----
     // Platform Interface
     // -----

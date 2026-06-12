@@ -53,7 +53,7 @@ void IEOS::lobby_interface_create_lobby(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_create_lobby_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_create_lobby_callback", ret);
     });
 }
 
@@ -82,7 +82,7 @@ void IEOS::lobby_interface_join_rtc_room(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_join_rtc_room_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_join_rtc_room_callback", ret);
     });
 }
 void IEOS::lobby_interface_leave_rtc_room(Ref<RefCounted> p_options) {
@@ -105,7 +105,7 @@ void IEOS::lobby_interface_leave_rtc_room(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_leave_rtc_room_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_leave_rtc_room_callback", ret);
     });
 }
 
@@ -129,7 +129,7 @@ void IEOS::lobby_interface_destroy_lobby(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_destroy_lobby_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_destroy_lobby_callback", ret);
     });
 }
 
@@ -164,7 +164,7 @@ void IEOS::lobby_interface_join_lobby(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_join_lobby_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_join_lobby_callback", ret);
     });
 }
 
@@ -196,7 +196,7 @@ void IEOS::lobby_interface_join_lobby_by_id(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_join_lobby_by_id_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_join_lobby_by_id_callback", ret);
     });
 }
 
@@ -220,7 +220,7 @@ void IEOS::lobby_interface_leave_lobby(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_leave_lobby_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_leave_lobby_callback", ret);
     });
 }
 
@@ -270,7 +270,7 @@ void IEOS::lobby_interface_update_lobby(Ref<RefCounted> p_options) {
 
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_update_lobby_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_update_lobby_callback", ret);
     });
 }
 
@@ -296,7 +296,7 @@ void IEOS::lobby_interface_promote_member(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_promote_member_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_promote_member_callback", ret);
     });
 }
 
@@ -322,7 +322,7 @@ void IEOS::lobby_interface_kick_member(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_kick_member_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_kick_member_callback", ret);
     });
 }
 
@@ -350,7 +350,7 @@ void IEOS::lobby_interface_hard_mute_member(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_hard_mute_member_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_hard_mute_member_callback", ret);
     });
 }
 
@@ -376,7 +376,7 @@ void IEOS::lobby_interface_send_invite(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["lobby_id"] = EOSG_GET_STRING(data->LobbyId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_send_invite_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_send_invite_callback", ret);
     });
 }
 
@@ -400,7 +400,7 @@ void IEOS::lobby_interface_reject_invite(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["invite_id"] = EOSG_GET_STRING(data->InviteId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_reject_invite_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_reject_invite_callback", ret);
     });
 }
 
@@ -422,7 +422,7 @@ void IEOS::lobby_interface_query_invites(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("lobby_interface_query_invites_callback", ret);
+        IEOS::emit_signal_deferred("lobby_interface_query_invites_callback", ret);
     });
 }
 

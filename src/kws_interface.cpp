@@ -45,7 +45,7 @@ void IEOS::kws_interface_create_user(Ref<RefCounted> p_options) {
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["kws_user_id"] = EOSG_GET_STRING(data->KWSUserId);
         ret["is_minor"] = EOSG_GET_BOOL(data->bIsMinor);
-        IEOS::get_singleton()->emit_signal("kws_interface_create_user_callback", ret);
+        IEOS::emit_signal_deferred("kws_interface_create_user_callback", ret);
     });
 }
 
@@ -99,7 +99,7 @@ void IEOS::kws_interface_query_age_gate(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["country_code"] = EOSG_GET_STRING(data->CountryCode);
         ret["age_of_consent"] = data->AgeOfConsent;
-        IEOS::get_singleton()->emit_signal("kws_interface_query_age_gate_callback", ret);
+        IEOS::emit_signal_deferred("kws_interface_query_age_gate_callback", ret);
     });
 }
 
@@ -124,7 +124,7 @@ void IEOS::kws_interface_query_permissions(Ref<RefCounted> p_options) {
         ret["kws_user_id"] = EOSG_GET_STRING(data->KWSUserId);
         ret["is_minor"] = EOSG_GET_BOOL(data->bIsMinor);
         ret["parent_email"] = EOSG_GET_STRING(data->ParentEmail);
-        IEOS::get_singleton()->emit_signal("kws_interface_query_permissions_callback", ret);
+        IEOS::emit_signal_deferred("kws_interface_query_permissions_callback", ret);
     });
 }
 
@@ -157,7 +157,7 @@ void IEOS::kws_interface_request_permissions(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("kws_interface_request_permissions_callback", ret);
+        IEOS::emit_signal_deferred("kws_interface_request_permissions_callback", ret);
     });
 }
 
@@ -181,6 +181,6 @@ void IEOS::kws_interface_update_parent_email(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("kws_interface_update_parent_email_callback", ret);
+        IEOS::emit_signal_deferred("kws_interface_update_parent_email_callback", ret);
     });
 }

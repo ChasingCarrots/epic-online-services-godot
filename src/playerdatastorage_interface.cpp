@@ -23,7 +23,7 @@ void IEOS::playerdatastorage_interface_query_file(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_query_file_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_query_file_callback", ret);
     });
 }
 
@@ -46,7 +46,7 @@ void IEOS::playerdatastorage_interface_query_file_list(Ref<RefCounted> p_options
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["file_count"] = static_cast<int>(data->FileCount);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_query_file_list_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_query_file_list_callback", ret);
     });
 }
 
@@ -133,7 +133,7 @@ void IEOS::playerdatastorage_interface_duplicate_file(Ref<RefCounted> p_options)
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_duplicate_file_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_duplicate_file_callback", ret);
     });
 }
 
@@ -157,7 +157,7 @@ void IEOS::playerdatastorage_interface_delete_file(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_delete_file_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_delete_file_callback", ret);
     });
 }
 
@@ -179,7 +179,7 @@ int IEOS::playerdatastorage_interface_delete_cache(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_delete_cache_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_delete_cache_callback", ret);
     });
 
     return static_cast<int>(res);
@@ -214,7 +214,7 @@ Variant IEOS::playerdatastorage_interface_read_file(Ref<RefCounted> p_options) {
         memcpy(data_chunk.ptrw(), data->DataChunk, data->DataChunkLengthBytes);
         ret["data_chunk"] = data_chunk;
 
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_read_file_data_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_read_file_data_callback", ret);
         // TODO: emit the signal on the EOSGFileTransferRequest object instead of IEOS
         return EOS_PlayerDataStorage_EReadResult::EOS_RR_ContinueReading;
     };
@@ -226,7 +226,7 @@ Variant IEOS::playerdatastorage_interface_read_file(Ref<RefCounted> p_options) {
         ret["filename"] = data->Filename;
         ret["bytes_transferred"] = static_cast<int>(data->BytesTransferred);
         ret["total_file_size_bytes"] = static_cast<int>(data->TotalFileSizeBytes);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_file_transfer_progress_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_file_transfer_progress_callback", ret);
         // TODO: emit the signal on the EOSGFileTransferRequest object instead of IEOS
     };
     p_options->reference();
@@ -239,7 +239,7 @@ Variant IEOS::playerdatastorage_interface_read_file(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["filename"] = data->Filename;
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_read_file_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_read_file_callback", ret);
     });
 
     return eosg_playerdatastorage_file_tranfer_request_to_wrapper(fileTranferRequest);
@@ -277,7 +277,7 @@ Variant IEOS::playerdatastorage_interface_write_file(Ref<RefCounted> p_options) 
         PackedByteArray data_buffer = client_data->get("data");
         int chunk_length_bytes = client_data->get("chunk_length_bytes");
 
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_write_file_data_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_write_file_data_callback", ret);
 
         uint32_t bytes_to_write = std::min((uint32_t)chunk_length_bytes, (uint32_t)(data_buffer.size() - written_buffer_length_bytes));
         if (bytes_to_write > 0) {
@@ -301,7 +301,7 @@ Variant IEOS::playerdatastorage_interface_write_file(Ref<RefCounted> p_options) 
         ret["filename"] = data->Filename;
         ret["bytes_transferred"] = static_cast<int>(data->BytesTransferred);
         ret["total_file_size_bytes"] = static_cast<int>(data->TotalFileSizeBytes);
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_file_transfer_progress_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_file_transfer_progress_callback", ret);
         // TODO: emit the signal on the EOSGFileTransferRequest object instead of IEOS
     };
     p_options->reference();
@@ -314,7 +314,7 @@ Variant IEOS::playerdatastorage_interface_write_file(Ref<RefCounted> p_options) 
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["filename"] = data->Filename;
-        IEOS::get_singleton()->emit_signal("playerdatastorage_interface_write_file_callback", ret);
+        IEOS::emit_signal_deferred("playerdatastorage_interface_write_file_callback", ret);
     });
 
     return eosg_playerdatastorage_file_tranfer_request_to_wrapper(fileTranferRequest);

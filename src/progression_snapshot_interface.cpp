@@ -52,7 +52,7 @@ void IEOS::progression_snapshot_interface_submit_snapshot(Ref<RefCounted> p_opti
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["snapshot_id"] = static_cast<int>(data->SnapshotId);
-        IEOS::get_singleton()->emit_signal("progression_snapshot_interface_submit_snapshot_callback", ret);
+        IEOS::emit_signal_deferred("progression_snapshot_interface_submit_snapshot_callback", ret);
     });
 }
 
@@ -74,7 +74,7 @@ void IEOS::progression_snapshot_interface_delete_snapshot(Ref<RefCounted> p_opti
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("progression_snapshot_interface_delete_snapshot_callback", ret);
+        IEOS::emit_signal_deferred("progression_snapshot_interface_delete_snapshot_callback", ret);
     });
 }
 

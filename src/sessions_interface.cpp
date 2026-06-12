@@ -232,7 +232,7 @@ void IEOS::sessions_interface_destroy_session(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_destroy_session_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_destroy_session_callback", ret);
     });
 }
 
@@ -253,7 +253,7 @@ void IEOS::sessions_interface_end_session(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_end_session_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_end_session_callback", ret);
     });
 }
 
@@ -283,7 +283,7 @@ void IEOS::sessions_interface_join_session(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_join_session_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_join_session_callback", ret);
     });
 }
 
@@ -305,7 +305,7 @@ void IEOS::sessions_interface_query_invites(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("sessions_interface_query_invites_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_query_invites_callback", ret);
     });
 }
 
@@ -346,7 +346,7 @@ void IEOS::sessions_interface_register_players(Ref<RefCounted> p_options) {
         }
         ret["sanctioned_players"] = sanctioned_players_array;
 
-        IEOS::get_singleton()->emit_signal("sessions_interface_register_players_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_register_players_callback", ret);
     });
 }
 
@@ -369,7 +369,7 @@ void IEOS::sessions_interface_reject_invite(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_reject_invite_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_reject_invite_callback", ret);
     });
 }
 
@@ -394,7 +394,7 @@ void IEOS::sessions_interface_send_invite(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_send_invite_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_send_invite_callback", ret);
     });
 }
 
@@ -415,7 +415,7 @@ void IEOS::sessions_interface_start_session(Ref<RefCounted> p_options) {
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("sessions_interface_start_session_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_start_session_callback", ret);
     });
 }
 
@@ -449,7 +449,7 @@ void IEOS::sessions_interface_unregister_players(Ref<RefCounted> p_options) {
         }
         ret["unregistered_players"] = unregistered_players_array;
 
-        IEOS::get_singleton()->emit_signal("sessions_interface_unregister_players_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_unregister_players_callback", ret);
     });
 }
 
@@ -474,6 +474,6 @@ void IEOS::sessions_interface_update_session(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["session_name"] = EOSG_GET_STRING(data->SessionName);
         ret["session_id"] = EOSG_GET_STRING(data->SessionId);
-        IEOS::get_singleton()->emit_signal("sessions_interface_update_session_callback", ret);
+        IEOS::emit_signal_deferred("sessions_interface_update_session_callback", ret);
     });
 }

@@ -21,7 +21,7 @@ int IEOS::rtc_data_interface_add_notify_data_received(Ref<RefCounted> p_options)
         data_arr.resize(data->DataLengthBytes);
         memcpy(data_arr.ptrw(), data->Data, data->DataLengthBytes);
         ret["data"] = data_arr;
-        IEOS::get_singleton()->emit_signal("rtc_data_data_received", ret);
+        IEOS::emit_signal_deferred("rtc_data_data_received", ret);
     }));
 }
 
@@ -43,7 +43,7 @@ int IEOS::rtc_data_interface_add_notify_participant_updated(Ref<RefCounted> p_op
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["data_status"] = static_cast<int>(data->DataStatus);
-        IEOS::get_singleton()->emit_signal("rtc_data_participant_updated", ret);
+        IEOS::emit_signal_deferred("rtc_data_participant_updated", ret);
     }));
 }
 
@@ -103,7 +103,7 @@ void IEOS::rtc_data_interface_update_receiving(Ref<RefCounted> p_options) {
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["data_enabled"] = EOSG_GET_BOOL(data->bDataEnabled);
-        IEOS::get_singleton()->emit_signal("rtc_data_interface_update_receiving_callback", ret);
+        IEOS::emit_signal_deferred("rtc_data_interface_update_receiving_callback", ret);
     });
 }
 
@@ -130,6 +130,6 @@ void IEOS::rtc_data_interface_update_sending(Ref<RefCounted> p_options) {
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["data_enabled"] = EOSG_GET_BOOL(data->bDataEnabled);
-        IEOS::get_singleton()->emit_signal("rtc_data_interface_update_sending_callback", ret);
+        IEOS::emit_signal_deferred("rtc_data_interface_update_sending_callback", ret);
     });
 }

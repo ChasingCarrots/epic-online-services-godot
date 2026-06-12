@@ -125,7 +125,7 @@ void IEOS::user_info_interface_query_user_info(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("user_info_interface_query_user_info_callback", ret);
+        IEOS::emit_signal_deferred("user_info_interface_query_user_info_callback", ret);
     });
 }
 
@@ -151,7 +151,7 @@ void IEOS::user_info_interface_query_user_info_by_display_name(Ref<RefCounted> p
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
         ret["display_name"] = EOSG_GET_STRING(data->DisplayName);
-        IEOS::get_singleton()->emit_signal("user_info_interface_query_user_info_by_display_name_callback", ret);
+        IEOS::emit_signal_deferred("user_info_interface_query_user_info_by_display_name_callback", ret);
     });
 }
 
@@ -179,7 +179,7 @@ void IEOS::user_info_interface_query_user_info_by_external_account(Ref<RefCounte
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
         ret["external_account_id"] = EOSG_GET_STRING(data->ExternalAccountId);
         ret["account_type"] = static_cast<int>(data->AccountType);
-        IEOS::get_singleton()->emit_signal("user_info_interface_query_user_info_by_external_account_callback", ret);
+        IEOS::emit_signal_deferred("user_info_interface_query_user_info_by_external_account_callback", ret);
     });
 }
 

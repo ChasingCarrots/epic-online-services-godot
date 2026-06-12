@@ -40,7 +40,7 @@ void IEOS::ecom_interface_checkout(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["transaction_id"] = String(data->TransactionId);
-        IEOS::get_singleton()->emit_signal("ecom_interface_checkout_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_checkout_callback", ret);
     });
 }
 
@@ -441,7 +441,7 @@ void IEOS::ecom_interface_query_entitlements(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_entitlements_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_entitlements_callback", ret);
     });
 }
 
@@ -467,7 +467,7 @@ void IEOS::ecom_interface_query_offers(Ref<RefCounted> p_options) {
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_offers_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_offers_callback", ret);
     });
 }
 
@@ -515,7 +515,7 @@ void IEOS::ecom_interface_query_ownership(Ref<RefCounted> p_options) {
         }
         ret["item_ownership"] = item_ownership_array;
 
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_ownership_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_ownership_callback", ret);
     });
 }
 
@@ -554,7 +554,7 @@ void IEOS::ecom_interface_query_ownership_token(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["ownership_token"] = EOSG_GET_STRING(data->OwnershipToken);
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_ownership_token_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_ownership_token_callback", ret);
     });
 }
 
@@ -588,7 +588,7 @@ void IEOS::ecom_interface_redeem_entitlements(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["redeemed_entitlement_ids_count"] = data->RedeemedEntitlementIdsCount;
-        IEOS::get_singleton()->emit_signal("ecom_interface_redeem_entitlements_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_redeem_entitlements_callback", ret);
     });
 }
 
@@ -657,7 +657,7 @@ void IEOS::ecom_interface_query_entitlement_token(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["entitlement_token"] = EOSG_GET_STRING(data->EntitlementToken);
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_entitlement_token_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_entitlement_token_callback", ret);
     });
 }
 
@@ -706,6 +706,6 @@ void IEOS::ecom_interface_query_ownership_by_sandbox_ids(Ref<RefCounted> p_optio
         }
         ret["sandbox_id_item_ownership"] = sandbox_id_item_ownership_array;
 
-        IEOS::get_singleton()->emit_signal("ecom_interface_query_ownership_by_sandbox_ids_callback", ret);
+        IEOS::emit_signal_deferred("ecom_interface_query_ownership_by_sandbox_ids_callback", ret);
     });
 }

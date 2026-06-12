@@ -29,6 +29,6 @@ void IEOS::reports_interface_send_player_behavior_report(Ref<RefCounted> p_optio
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("reports_interface_send_player_behavior_report_callback", ret);
+        IEOS::emit_signal_deferred("reports_interface_send_player_behavior_report_callback", ret);
     });
 }

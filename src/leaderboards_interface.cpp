@@ -165,7 +165,7 @@ void IEOS::leaderboards_interface_query_leaderboard_definitions(Ref<RefCounted> 
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("leaderboards_interface_query_leaderboard_definitions_callback", ret);
+        IEOS::emit_signal_deferred("leaderboards_interface_query_leaderboard_definitions_callback", ret);
     });
 }
 
@@ -189,7 +189,7 @@ void IEOS::leaderboards_interface_query_leaderboard_ranks(Ref<RefCounted> p_opti
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["leaderboard_id"] = EOSG_GET_STRING(data->LeaderboardId);
-        IEOS::get_singleton()->emit_signal("leaderboards_interface_query_leaderboard_ranks_callback", ret);
+        IEOS::emit_signal_deferred("leaderboards_interface_query_leaderboard_ranks_callback", ret);
     });
 }
 
@@ -239,6 +239,6 @@ void IEOS::leaderboards_interface_query_leaderboard_user_scores(Ref<RefCounted> 
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
-        IEOS::get_singleton()->emit_signal("leaderboards_interface_query_leaderboard_user_scores_callback", ret);
+        IEOS::emit_signal_deferred("leaderboards_interface_query_leaderboard_user_scores_callback", ret);
     });
 }

@@ -101,7 +101,7 @@ void IEOS::presence_interface_query_presence(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_epic_account_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("presence_interface_query_presence_callback", ret);
+        IEOS::emit_signal_deferred("presence_interface_query_presence_callback", ret);
     });
 }
 
@@ -129,6 +129,6 @@ void IEOS::presence_interface_set_presence(Ref<RefCounted> p_options) {
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_epic_account_id_to_string(data->LocalUserId);
         ret["rich_presence_result_code"] = static_cast<int>(data->RichPresenceResultCode);
-        IEOS::get_singleton()->emit_signal("presence_interface_set_presence_callback", ret);
+        IEOS::emit_signal_deferred("presence_interface_set_presence_callback", ret);
     });
 }

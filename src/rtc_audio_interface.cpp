@@ -123,7 +123,7 @@ void IEOS::rtc_audio_interface_query_input_devices_information(Ref<RefCounted> p
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_query_input_devices_information_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_query_input_devices_information_callback", ret);
     });
 }
 
@@ -141,7 +141,7 @@ void IEOS::rtc_audio_interface_query_output_devices_information(Ref<RefCounted> 
         Ref<RefCounted> client_data = reinterpret_cast<RefCounted *>(data->ClientData);
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_query_output_devices_information_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_query_output_devices_information_callback", ret);
     });
 }
 
@@ -163,7 +163,7 @@ void IEOS::rtc_audio_interface_register_platform_user(Ref<RefCounted> p_options)
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
         ret["platform_user_id"] = EOSG_GET_STRING(data->PlatformUserId);
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_register_platform_user_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_register_platform_user_callback", ret);
     });
 }
 
@@ -189,7 +189,7 @@ void IEOS::rtc_audio_interface_set_input_device_settings(Ref<RefCounted> p_optio
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
         ret["real_device_id"] = EOSG_GET_STRING(data->RealDeviceId);
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_set_input_device_settings_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_set_input_device_settings_callback", ret);
     });
 }
 
@@ -213,7 +213,7 @@ void IEOS::rtc_audio_interface_set_output_device_settings(Ref<RefCounted> p_opti
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
         ret["real_device_id"] = EOSG_GET_STRING(data->RealDeviceId);
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_set_output_device_settings_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_set_output_device_settings_callback", ret);
     });
 }
 
@@ -235,7 +235,7 @@ void IEOS::rtc_audio_interface_unregister_platform_user(Ref<RefCounted> p_option
         ret["client_data"] = client_data->get("client_data");
         client_data->unreference();
         ret["platform_user_id"] = EOSG_GET_STRING(data->PlatformUserId);
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_unregister_platform_user_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_unregister_platform_user_callback", ret);
     });
 }
 
@@ -266,7 +266,7 @@ void IEOS::rtc_audio_interface_update_participant_volume(Ref<RefCounted> p_optio
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["volume"] = data->Volume;
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_update_participant_volume_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_update_participant_volume_callback", ret);
     });
 }
 
@@ -294,7 +294,7 @@ void IEOS::rtc_audio_interface_update_receiving_volume(Ref<RefCounted> p_options
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["volume"] = data->Volume;
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_update_receiving_volume_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_update_receiving_volume_callback", ret);
     });
 }
 
@@ -325,7 +325,7 @@ void IEOS::rtc_audio_interface_update_receiving(Ref<RefCounted> p_options) {
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["audio_enabled"] = data->bAudioEnabled == EOS_TRUE;
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_update_receiving_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_update_receiving_callback", ret);
     });
 }
 
@@ -353,7 +353,7 @@ void IEOS::rtc_audio_interface_update_sending_volume(Ref<RefCounted> p_options) 
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["volume"] = data->Volume;
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_update_sending_volume_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_update_sending_volume_callback", ret);
     });
 }
 
@@ -381,7 +381,7 @@ void IEOS::rtc_audio_interface_update_sending(Ref<RefCounted> p_options) {
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["audio_status"] = static_cast<int>(data->AudioStatus);
-        IEOS::get_singleton()->emit_signal("rtc_audio_interface_update_sending_callback", ret);
+        IEOS::emit_signal_deferred("rtc_audio_interface_update_sending_callback", ret);
     });
 }
 
@@ -405,7 +405,7 @@ int IEOS::rtc_audio_interface_add_notify_audio_before_render(Ref<RefCounted> p_o
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["buffer"] = eosg_rtc_audio_audio_buffer_to_dict(data->Buffer);
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
-        IEOS::get_singleton()->emit_signal("rtc_audio_audio_before_render", ret);
+        IEOS::emit_signal_deferred("rtc_audio_audio_before_render", ret);
     });
 
     return static_cast<int>(notification_id);
@@ -428,7 +428,7 @@ int IEOS::rtc_audio_interface_add_notify_audio_before_send(Ref<RefCounted> p_opt
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["buffer"] = eosg_rtc_audio_audio_buffer_to_dict(data->Buffer);
-        IEOS::get_singleton()->emit_signal("rtc_audio_audio_before_send", ret);
+        IEOS::emit_signal_deferred("rtc_audio_audio_before_send", ret);
     });
     return static_cast<int>(notification_id);
 }
@@ -450,7 +450,7 @@ int IEOS::rtc_audio_interface_add_notify_audio_input_state(Ref<RefCounted> p_opt
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["status"] = static_cast<int>(data->Status);
-        IEOS::get_singleton()->emit_signal("rtc_audio_audio_input_state", ret);
+        IEOS::emit_signal_deferred("rtc_audio_audio_input_state", ret);
     });
     return static_cast<int>(notification_id);
 }
@@ -472,7 +472,7 @@ int IEOS::rtc_audio_interface_add_notify_audio_output_state(Ref<RefCounted> p_op
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["room_name"] = EOSG_GET_STRING(data->RoomName);
         ret["status"] = static_cast<int>(data->Status);
-        IEOS::get_singleton()->emit_signal("rtc_audio_audio_output_state", ret);
+        IEOS::emit_signal_deferred("rtc_audio_audio_output_state", ret);
     });
     return static_cast<int>(notification_id);
 }
@@ -495,7 +495,7 @@ int IEOS::rtc_audio_interface_add_notify_participant_updated(Ref<RefCounted> p_o
         ret["participant_id"] = eosg_product_user_id_to_string(data->ParticipantId);
         ret["speaking"] = EOSG_GET_BOOL(data->bSpeaking);
         ret["audio_status"] = static_cast<int>(data->AudioStatus);
-        IEOS::get_singleton()->emit_signal("rtc_audio_participant_updated", ret);
+        IEOS::emit_signal_deferred("rtc_audio_participant_updated", ret);
     });
     return static_cast<int>(notification_id);
 }

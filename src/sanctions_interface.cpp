@@ -23,7 +23,7 @@ void IEOS::sanctions_interface_query_active_player_sanctions(Ref<RefCounted> p_o
         ret["client_data"] = client_data->get("client_data");
         ret["local_user_id"] = eosg_product_user_id_to_string(data->LocalUserId);
         ret["target_user_id"] = eosg_product_user_id_to_string(data->TargetUserId);
-        IEOS::get_singleton()->emit_signal("sanctions_interface_query_active_player_sanctions_callback", ret);
+        IEOS::emit_signal_deferred("sanctions_interface_query_active_player_sanctions_callback", ret);
     });
 }
 
@@ -81,6 +81,6 @@ void IEOS::sanctions_interface_create_player_sanction_appeal(Ref<RefCounted> p_o
         client_data->unreference();
         ret["client_data"] = client_data->get("client_data");
         ret["reference_id"] = EOSG_GET_STRING(data->ReferenceId);
-        IEOS::get_singleton()->emit_signal("sanctions_interface_create_player_sanction_appeal_callback", ret);
+        IEOS::emit_signal_deferred("sanctions_interface_create_player_sanction_appeal_callback", ret);
     });
 }
