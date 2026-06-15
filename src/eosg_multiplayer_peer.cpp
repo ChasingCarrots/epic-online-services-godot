@@ -666,7 +666,15 @@ bool EOSGMultiplayerPeer::_is_server() const {
  * establish a connection between two mesh instances and nothing needs to be done with the packet.
  ****************************************/
 void EOSGMultiplayerPeer::_poll() {
+    // Serialize against EOS callbacks that mutate peer state during EOS_Platform_Tick.
+    // Recursive lock, so the nested EOS calls below are fine; also makes poll() safe to
+    // call off the thread that ticks the platform.
+    EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_COND_MSG(!_is_active(), "The multiplayer instance isn't currently active.");
+
+    // Pull received packets from the SDK into the mediator's per-socket queues, so
+    // reception is driven by poll() instead of the main loop's process frame.
+    EOSGPacketPeerMediator::get_singleton()->receive_packets();
 
     //Sending EVENT_REQUEST_CONNECTION for pening connections. Sometimes when trying to connect to a new peer, the packet with event type EVENT_RECIEVE_PEER_ID was interrupted. 
     //This is propably because the EOS SDK internally popped the package and therfore did not forwarded it to EOSG.

@@ -4,8 +4,8 @@
  * Description: Manages EOSG multiplayer instances when they are active.
  * Multiplayer instances register their socket id with the mediator when
  * they become active and unregister their socket id when they close.
- * The mediator receives packets from the EOS P2P interface every process
- * frame and sorts those packets according to their destination socket so
+ * The mediator receives packets from the EOS P2P interface when a peer polls
+ * and sorts those packets according to their destination socket so
  * that the appropriate multiplayer instance can poll them later. The mediator
  * receives EOS notifications and fowards it to the appropriate multiplayer
  * instance according to the socket the notification was received from.
@@ -27,7 +27,7 @@
 EOSGPacketPeerMediator *EOSGPacketPeerMediator::singleton = nullptr;
 
 void EOSGPacketPeerMediator::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("_on_process_frame"), &EOSGPacketPeerMediator::_on_process_frame);
+    ClassDB::bind_method(D_METHOD("receive_packets"), &EOSGPacketPeerMediator::receive_packets);
     ClassDB::bind_method(D_METHOD("_on_connect_interface_login"), &EOSGPacketPeerMediator::_on_connect_interface_login);
     ClassDB::bind_method(D_METHOD("get_total_packet_count"), &EOSGPacketPeerMediator::get_total_packet_count);
     ClassDB::bind_method(D_METHOD("get_sockets"), &EOSGPacketPeerMediator::get_sockets);
@@ -44,15 +44,13 @@ void EOSGPacketPeerMediator::_bind_methods() {
 }
 
 /****************************************
- * _on_process_frame
- * Description: Method is connected to the game main loop's process signal so
- * that it can execute every process frame (see _init()). Checks if there are
- * any packets available from the incoming packet queue. If there are, receives
- * the packet and sorts it into separate queues according to it's destination socket. Packets that
- * are peer id packets (packets with EVENT_RECIEVE_PEER_ID) and pushed to the front. Packets will
- * stop being polled if the queue size limit is reached.
+ * receive_packets
+ * Description: Receives all packets currently available from the EOS P2P incoming
+ * queue and sorts them into per-socket queues for the matching multiplayer instance
+ * to poll. Peer id packets (EVENT_RECIEVE_PEER_ID) are pushed to the front. Stops if
+ * the queue size limit is reached. Call this from the peer's poll().
  ****************************************/
-void EOSGPacketPeerMediator::_on_process_frame() {
+void EOSGPacketPeerMediator::receive_packets() {
     EOSApiLockGuard eos_api_lockguard;
     if (EOSGMultiplayerPeer::get_local_user_id().is_empty())
         return;
@@ -222,18 +220,15 @@ void EOSGPacketPeerMediator::clear_packets_from_remote_user(const String &socket
 
 /****************************************
  * _init
- * Description: Initialized EOSGPacketPeerMediator. Connects _on_process_frame to the
- * main loop's process signal. Adds EOS callbacks so that it can receive notifications.
+ * Description: Initializes EOSGPacketPeerMediator. Adds EOS callbacks so that it can
+ * receive notifications. Packet reception is driven by receive_packets(), called from
+ * the peer's poll().
  ****************************************/
 void EOSGPacketPeerMediator::_init() {
     EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_COND_MSG(EOSGMultiplayerPeer::get_local_user_id().is_empty(), "Failed to initialize EOSGPacketPeerMediator. Local user id has not been set.");
     if (initialized)
         return;
-
-    MainLoop *main_loop = Engine::get_singleton()->get_main_loop();
-    ERR_FAIL_COND_MSG(!main_loop->has_signal("process_frame"), "Failed to initialize EOSGPacketPeerMediator. Main loop does not have the process_frame() signal.");
-    main_loop->connect("process_frame", process_frame_callback);
 
     //Register callbacks
     _add_connection_closed_callback();
@@ -253,9 +248,6 @@ void EOSGPacketPeerMediator::_terminate() {
     EOSApiLockGuard eos_api_lockguard;
     if (!initialized)
         return;
-
-    MainLoop *main_loop = Engine::get_singleton()->get_main_loop();
-    main_loop->disconnect("process_frame", process_frame_callback);
 
     //Unregister callbacks
     IEOS::get_singleton()->_p2p_remove_notify_peer_connection_established(connection_established_callback_id);
@@ -543,8 +535,6 @@ EOSGPacketPeerMediator::EOSGPacketPeerMediator() {
     EOSApiLockGuard eos_api_lockguard;
     ERR_FAIL_COND_MSG(singleton != nullptr, "EOSGPacketPeerMediator already initialized");
     singleton = this;
-
-    process_frame_callback = Callable(this, "_on_process_frame");
 
     connect_interface_login_callback = Callable(this, "_on_connect_interface_login");
     IEOS::get_singleton()->connect("connect_interface_login_callback", connect_interface_login_callback);

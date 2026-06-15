@@ -52,7 +52,6 @@ class EOSGPacketPeerMediator : public RefCounted {
 
 private:
     static EOSGPacketPeerMediator *singleton;
-    Callable process_frame_callback;
     Callable connect_interface_login_callback;
     static void _bind_methods();
 
@@ -62,7 +61,6 @@ private:
     int max_queue_size = 5000;
     bool initialized = false;
 
-    void _on_process_frame();
     void _init();
     void _terminate();
 
@@ -133,6 +131,7 @@ public:
     }
 
     int get_packet_count_from_remote_user(const String &remote_user, const String &socket_id);
+    void receive_packets();
     bool poll_next_packet(const String &socket_id, PacketData *out_packet);
     bool next_packet_is_peer_id_packet(const String &socket_id);
     bool register_peer(EOSGMultiplayerPeer *peer);
