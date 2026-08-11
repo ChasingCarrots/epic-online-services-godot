@@ -742,7 +742,7 @@ void EOSGMultiplayerPeer::_poll() {
             case Event::EVENT_STORE_PACKET: {
                 uint32_t peer_id = *reinterpret_cast<uint32_t *>(data_ptr->ptrw() + INDEX_PEER_ID);
                 if (!peers.has(peer_id)) {
-                    return; //ignore the packet if we don't have the peer
+                    continue; //ignore the packet if we don't have the peer
                 }
 
                 EOS_EPacketReliability reliability = static_cast<EOS_EPacketReliability>(data_ptr->ptrw()[INDEX_TRANSFER_MODE]);
